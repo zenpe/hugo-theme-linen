@@ -1,0 +1,52 @@
+{{- $isPost := .IsPage -}}
+{{- $logo := site.Params.logo | default dict -}}
+{{- $logoSrc := $logo.src | default "" -}}
+{{- $logoText := $logo.text | default "" -}}
+{{- $logoWidth := $logo.width | default 225 -}}
+{{- $logoHeight := $logo.height | default 42 -}}
+{{- $rssPath := site.Params.feed.path | default "/index.xml" -}}
+{{- $localeMap := site.Params.siteOriginLocaleMap | default dict -}}
+{{- $currentLanguage := site.Params.locale | default site.Language.Lang -}}
+{{- $targetLanguage := "" -}}
+{{- $targetLanguagePath := "" -}}
+{{- if .Translations -}}
+  {{- $target := index .Translations 0 -}}
+  {{- $targetLanguage = $target.Language.Lang -}}
+  {{- $targetLanguagePath = $target.RelPermalink -}}
+{{- else if and $localeMap (or (not $isPost) .Params.translations) -}}
+  {{- with .Params.translations -}}
+    {{- $targetLanguage = index . 0 -}}
+  {{- else -}}
+    {{- $targetLanguage = cond (hasPrefix (lower $currentLanguage) "zh") "en" "zh-CN" -}}
+  {{- end -}}
+  {{- $targetOrigin := index $localeMap $targetLanguage -}}
+  {{- if $targetOrigin -}}
+    {{- $targetLanguagePath = printf "%s%s" $targetOrigin (strings.TrimPrefix "/" .RelPermalink) -}}
+  {{- end -}}
+{{- end -}}
+{{- if $isPost }}<div class="nav-header-pleaceholder"></div>{{ end -}}
+<div class="nav-header{{ if $isPost }} is-post{{ end }}">
+  <div class="header-inner">
+    <a class="title{{ if $logoText }} is-text{{ end }}{{ if $logoSrc }} has-image{{ end }}" href="{{ site.Home.RelPermalink }}" title="index" style="{{ if $logoSrc }}background-image: url({{ $logoSrc | relURL }});{{ end }}{{ if and $logoWidth $logoHeight }}aspect-ratio: {{ $logoWidth }}/{{ $logoHeight }};{{ end }}">{{ $logoText }}</a>
+    <div class="right">
+      <div class="navItems">
+        {{- range site.Params.navItems }}
+        <a class="navItem{{ if hasPrefix $.RelPermalink .path }} active{{ end }}" href="{{ .path | relURL }}">{{ .name }}</a>
+        {{- end }}
+      </div>
+      <div class="buttonSet">
+        {{- if .Params.hdrSwitch }}<span class="button hdr-switch" title="Switch HDR/SDR content"></span>{{ end -}}
+        {{- if $targetLanguagePath }}
+          <a class="button language {{ $targetLanguage }}" href="{{ $targetLanguagePath }}" target="_self" title="switch language"></a>
+        {{- end }}
+        {{- with site.Params.info.github }}
+        <a class="button github" href="{{ . }}" target="_blank" rel="noopener" title="github"></a>
+        {{- end }}
+        {{- if ne site.Params.feed false }}
+        <a class="button rss" href="{{ $rssPath | relURL }}" target="_blank" rel="noopener" title="rss"></a>
+        {{- end }}
+        {{- if and $isPost (ne .Params.toc false) }}<div id="toc-toggle" class="button toc"></div>{{ end -}}
+      </div>
+    </div>
+  </div>
+</div>

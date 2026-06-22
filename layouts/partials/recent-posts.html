@@ -1,0 +1,9 @@
+{{- $pages := .pages | default (where site.RegularPages "Section" "posts") -}}
+{{- $showHidden := .showHidden | default false -}}
+<div id="recent-posts">
+  {{- range $pages }}
+    {{- if or $showHidden (not .Params.hide.recent) }}
+      {{ partial "post-item.html" . }}
+    {{- end }}
+  {{- end }}
+</div>

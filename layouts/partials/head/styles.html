@@ -1,0 +1,21 @@
+{{- $version := site.Params.version | default now.Unix -}}
+{{- $styles := slice "linen-theme/css/linen.scss" "linen-theme/css/mediaquery.scss" "linen-theme/css/hugo-compat.scss" -}}
+{{- range $styles -}}
+  {{- with resources.Get . -}}
+    {{- $css := . | toCSS (dict "outputStyle" "compressed" "targetPath" (replace .Name ".scss" ".css")) | fingerprint -}}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+  {{- else -}}
+    <link rel="stylesheet" href="{{ printf "/%s?v=%v" (replace . ".scss" ".css") $version | relURL }}">
+  {{- end -}}
+{{- end -}}
+{{- if site.Params.lazyload | default true -}}
+<link rel="stylesheet" href="{{ printf "/linen-theme/css/lazyload.css?v=%v" $version | relURL }}">
+{{- end -}}
+{{- if .IsPage -}}
+  {{- with resources.Get "linen-theme/css/linkcard.scss" -}}
+    {{- $linkcard := . | toCSS (dict "outputStyle" "compressed" "targetPath" "linen-theme/css/linkcard.css") | fingerprint -}}
+    <link rel="stylesheet" href="{{ $linkcard.RelPermalink }}">
+  {{- else -}}
+    <link rel="stylesheet" href="{{ printf "/linen-theme/css/linkcard.css?v=%v" $version | relURL }}">
+  {{- end -}}
+{{- end -}}

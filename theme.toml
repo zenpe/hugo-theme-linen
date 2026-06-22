@@ -1,0 +1,22 @@
+name = "Hugo Linen"
+license = "MIT"
+licenselink = "https://github.com/zenpe/hugo-theme-linen/blob/main/LICENSE"
+description = "A clean Hugo port of the Linen theme for readable blogs and photo-friendly writing."
+homepage = "https://github.com/zenpe/hugo-theme-linen"
+tags = ["blog", "clean", "minimal", "responsive", "photography"]
+features = ["posts", "archives", "series", "taxonomy", "toc", "photoswipe", "lazyload", "raw-markdown"]
+min_version = "0.163.2"
+
+[author]
+  name = "zenpe"
+  homepage = "https://github.com/zenpe"
+
+[original]
+  author = "LynanBreeze"
+  homepage = "https://github.com/LynanBreeze"
+  repo = "https://github.com/LynanBreeze/hexo-theme-linen"
+
+[module]
+  [module.hugoVersion]
+    min = "0.163.2"
+    extended = true

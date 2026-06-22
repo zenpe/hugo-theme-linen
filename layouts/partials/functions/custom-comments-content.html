@@ -1,0 +1,17 @@
+{{- $page := . -}}
+{{- $content := $page.Content -}}
+{{- range $page.Params.customComments }}
+  {{- $text := .text -}}
+  {{- $targetIndex := .index | default 0 -}}
+  {{- $comment := .comment | default "" -}}
+  {{- if $text }}
+    {{- $parts := split $content $text -}}
+    {{- if gt (len $parts) (add $targetIndex 1) }}
+      {{- $before := delimit (first (add $targetIndex 1) $parts) $text -}}
+      {{- $after := delimit (after (add $targetIndex 1) $parts) $text -}}
+      {{- $wrapped := printf "<span class=\"commented-text\" data-comment=\"%s\">%s</span>" ($comment | htmlEscape) ($text | htmlEscape) -}}
+      {{- $content = printf "%s%s%s" $before $wrapped $after -}}
+    {{- end }}
+  {{- end }}
+{{- end -}}
+{{- $content | safeHTML -}}

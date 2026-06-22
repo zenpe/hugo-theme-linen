@@ -1,0 +1,77 @@
+{{ define "main" }}
+{{- $posts := where (where site.RegularPages "Section" "posts") "Params.hide.archive" "!=" true -}}
+{{- with .Params.year }}
+  {{- $year := printf "%v" . -}}
+  <h1 id="archieve-h1">{{ $year }}</h1>
+  <div class="posts-info-layout">
+    <div class="posts-wrap">
+      {{- $yearPosts := slice -}}
+      {{- range $posts.ByDate.Reverse }}
+        {{- if eq (.Date.Format "2006") $year }}
+          {{- $yearPosts = $yearPosts | append . -}}
+        {{- end }}
+      {{- end }}
+      {{- $paginator := $.Paginate $yearPosts -}}
+      {{ partial "recent-posts.html" (dict "pages" $paginator.Pages "showHidden" true) }}
+      {{ partial "paginator.html" $paginator }}
+    </div>
+    <div class="info-wrap">{{ partial "site-info.html" $ }}</div>
+  </div>
+{{- else }}
+<div id="archive">
+  <div class="two-columns">
+    {{- if site.Taxonomies.categories }}
+    <aside>
+      <h2 id="categories">{{ i18n "categories" }}</h2>
+      <ul class="archive-list">
+        {{- range site.Taxonomies.categories.Alphabetical }}
+        <li class="archive-list-item">
+          <a class="archive-list-link" data-firstletter="{{ substr .Page.Title 0 1 }}" href="{{ .Page.RelPermalink }}">{{ .Page.Title }}<span class="archive-list-count">{{ .Count }}</span></a>
+        </li>
+        {{- end }}
+      </ul>
+    </aside>
+    {{- end }}
+    <aside>
+      <h2 id="posts">{{ i18n "posts" }}</h2>
+      <ul class="archive-list">
+        {{- range ($posts.GroupByDate "2006") }}
+        <li class="archive-list-item">
+          <a class="archive-list-link" data-firstletter="{{ substr .Key 3 1 }}" href="{{ printf "/archives/%s/" .Key | relURL }}">{{ .Key }}<span class="archive-list-count">{{ len .Pages }}</span></a>
+        </li>
+        {{- end }}
+      </ul>
+    </aside>
+  </div>
+
+  {{- if site.Taxonomies.series }}
+  <br>
+  <aside>
+    <h2 id="series">{{ i18n "series" }}</h2>
+    <ul class="archive-list">
+      {{- range site.Taxonomies.series.Alphabetical }}
+      <li class="archive-list-item">
+        <a class="archive-list-link" data-firstletter="{{ substr .Page.Title 0 1 }}" href="{{ .Page.RelPermalink }}">{{ .Page.Title }}<span class="archive-list-count">{{ .Count }}</span></a>
+      </li>
+      {{- end }}
+    </ul>
+  </aside>
+  {{- end }}
+
+  {{- if site.Taxonomies.tags }}
+  <br>
+  <aside>
+    <h2 id="tags">{{ i18n "tags" }}</h2>
+    <div class="tag-list-wrap">
+      <ul class="tag-list">
+        {{- range site.Taxonomies.tags.Alphabetical }}
+        <li class="tag-list-item"><a class="tag-list-link" href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a><span class="tag-list-count">{{ .Count }}</span></li>
+        {{- end }}
+      </ul>
+    </div>
+  </aside>
+  {{- end }}
+
+</div>
+{{- end }}
+{{ end }}

@@ -1,0 +1,9 @@
+.ace-tool/
+.chrome-*/
+exampleSite/public/
+exampleSite/resources/
+exampleSite/screenshots/
+exampleSite/.hugo_build.lock
+exampleSite/hugo-server.*.log
+.hugo_build.lock
+hugo-server.*.log

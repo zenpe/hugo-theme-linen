@@ -1,0 +1,6 @@
+{{- $page := . -}}
+{{- with $page.Params.excerpt -}}
+  {{- . | plainify -}}
+{{- else -}}
+  {{- $page.Summary | plainify -}}
+{{- end -}}

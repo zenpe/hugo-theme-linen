@@ -1,0 +1,172 @@
+{{ define "main" }}
+{{- $version := site.Params.version | default now.Unix -}}
+{{- $seriesName := partial "functions/series-name.html" . -}}
+{{- $seriesPages := partial "functions/series-pages.html" $seriesName -}}
+{{- if .Params.cover }}
+<div class="post-cover-img-wrap{{ with .Params.coverPlaceholder }} has-placeholder{{ end }}"{{ with .Params.coverPlaceholder }} style="background-image: url({{ . | relURL }})"{{ end }}>
+  <div class="post-cover-img-placeholder"></div>
+  <div class="post-cover-img-placeholder-after"></div>
+  <script>
+    const coverImgStartTime = performance.now();
+    setTimeout(() => {
+      const postCoverImg = document.getElementById('postCoverImg');
+      if (postCoverImg && (!postCoverImg.classList.contains('loaded') || postCoverImg.classList.contains('cached'))) {
+        postCoverImg.classList.add('loading');
+      }
+    }, 100);
+    function onPostCoverImgLoaded(img) {
+      if (performance.now() - coverImgStartTime > 300) {
+        img.classList.add('loaded');
+      } else {
+        img.classList.add('cached');
+      }
+    }
+  </script>
+  <img id="postCoverImg" class="cover-img" src="{{ .Params.cover | relURL }}" alt="" onload="onPostCoverImgLoaded(this)">
+  {{- with .Params.coverInfo }}
+  <div class="cover-info">
+    {{- if .url }}<a class="copyright link" href="{{ .url }}" target="_blank" rel="noopener">{{ else }}<div class="copyright">{{ end }}
+      <span class="icon{{ if .location }} location{{ end }}"></span>
+      <span class="text">{{ .author | default .location }}</span>
+    {{- if .url }}</a>{{ else }}</div>{{ end }}
+  </div>
+  {{- end }}
+</div>
+{{- end }}
+
+<article id="post" class="article">
+  <h1 class="post-title">{{ .Title }}{{ with .Params.subTitle }}<span class="sub-title">{{ . }}</span>{{ end }}</h1>
+  <div class="post-meta">
+    {{- if not .Date.IsZero }}
+    <time class="date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ partial "functions/date.html" .Date }}</time>
+    {{- end }}
+    {{- with .GetTerms "categories" }}
+    <div class="categories">
+      {{- range . }}
+      <a class="category-item" href="{{ .RelPermalink }}">{{ .Title }}</a>
+      {{- end }}
+    </div>
+    {{- end }}
+    <div class="read-time">{{ partial "words.html" . }}</div>
+    <div class="page-pv">{{ i18n "reads" }}<span id="busuanzi_value_page_pv"></span></div>
+    {{- if .Params.appendRawMarkdown }}
+    <div id="content-switch" data-rawcontentlabel="{{ i18n "switchTo" }}{{ i18n "rawMarkdownContent" }}" data-renderedcontentlabel="{{ i18n "switchTo" }}{{ i18n "renderedContent" }}">{{ i18n "switchTo" }}{{ i18n "rawMarkdownContent" }}</div>
+    {{- end }}
+  </div>
+  {{- if and .Params.ageWarning (gt (sub now.Unix .Date.Unix) 15552000) }}
+  <div id="post-age-warning">{{ i18n "age_notice" | safeHTML }}</div>
+  {{- end }}
+  <div id="page-content">{{ partial "functions/custom-comments-content.html" . }}</div>
+  <div id="page-content-end"></div>
+  {{- if .Params.appendRawMarkdown }}
+  {{- $rawMarkdown := .RawContent -}}
+  {{- $rawFileName := "" -}}
+  {{- with .File }}{{ $rawFileName = printf "%s.md" .ContentBaseName }}{{ end -}}
+  {{- with .Params.rawMarkdownFile }}{{ $rawFileName = . }}{{ end -}}
+  {{- with site.Params.rawMarkdownSourceDir }}
+    {{- $rawPath := cond (ne $rawFileName "") (path.Join . $rawFileName) "" -}}
+    {{- if and (ne $rawPath "") (fileExists $rawPath) }}{{ $rawMarkdown = readFile $rawPath }}{{ end -}}
+  {{- end }}
+  <div id="raw-markdown-block">
+    {{- partial "functions/raw-markdown-content.html" $rawMarkdown -}}
+  </div>
+  {{- end }}
+  {{- with .GetTerms "tags" }}
+  <div class="tags">
+    {{- range . }}
+    <a class="tag-item" href="{{ .RelPermalink }}">{{ .Title }}</a>
+    {{- end }}
+  </div>
+  {{- end }}
+</article>
+
+{{- if not $seriesName }}
+<div class="post-nav-wrap">
+  <div class="post-nav">
+    {{- with .PrevInSection }}
+    <a class="post-nav-item prev" target="_self" href="{{ .RelPermalink }}"><span class="item-link">{{ .Title }}</span>{{ with .Params.subTitle }}<span class="sub-title">{{ . }}</span>{{ end }}<span class="nav-indicator-text">{{ i18n "prevPost" }}</span></a>
+    {{- end }}
+    {{- with .NextInSection }}
+    <a class="post-nav-item next" target="_self" href="{{ .RelPermalink }}"><span class="item-link">{{ .Title }}</span>{{ with .Params.subTitle }}<span class="sub-title">{{ . }}</span>{{ end }}<span class="nav-indicator-text">{{ i18n "nextPost" }}</span></a>
+    {{- end }}
+  </div>
+</div>
+{{- end }}
+
+{{- with .Params.donates }}
+<div id="page-donates">{{ i18n "donateToAuthor" }}
+  <div id="donate-modal">
+    {{- range . }}
+    <img class="qr-code" src="{{ .qrcode | relURL }}" alt="{{ .type }}">
+    {{- end }}
+  </div>
+</div>
+{{- end }}
+
+{{- with .Params.sponsors }}
+<div class="sponsor-list">
+  <div class="sponsor-list-header">{{ i18n "thanks" }}</div>
+  <ul>
+    {{- range . }}
+    <li class="sponsor-item">
+      <span class="sponsor-name">{{ .name }}</span>
+      <span class="sponsor-amount">{{ i18n "sponsored" }} {{ .amount }}</span>
+      <span class="sponsor-date">{{ partial "functions/date.html" (time.AsTime .date) }}</span>
+    </li>
+    {{- end }}
+  </ul>
+</div>
+{{- end }}
+
+{{- if $seriesName }}
+{{- $current := . -}}
+{{- $currentIndex := 0 -}}
+{{- range $i, $p := $seriesPages }}{{ if eq $p.RelPermalink $current.RelPermalink }}{{ $currentIndex = $i }}{{ end }}{{ end -}}
+{{- $previousPost := cond (gt $currentIndex 0) (index $seriesPages (sub $currentIndex 1)) nil -}}
+{{- $nextPost := cond (lt (add $currentIndex 1) (len $seriesPages)) (index $seriesPages (add $currentIndex 1)) nil -}}
+<div class="series-nav">
+  <div class="series-name">
+    <div class="series-name-content">
+      <i class="series-icon"></i>
+      <span>{{ $seriesName }}</span>
+      <span class="dot"></span>
+      <span>{{ i18n "toc" }}</span>
+    </div>
+  </div>
+  {{- if or $previousPost $nextPost }}
+  <div class="post-nav-wrap">
+    <div class="post-nav">
+      {{- with $previousPost }}
+      <a class="post-nav-item prev" target="_self" href="{{ .RelPermalink }}"><span class="item-link">{{ .Title }}</span>{{ with .Params.subTitle }}<span class="sub-title">{{ . }}</span>{{ end }}<span class="nav-indicator-text">{{ i18n "prevPost" }}</span></a>
+      {{- end }}
+      {{- with $nextPost }}
+      <a class="post-nav-item next" target="_self" href="{{ .RelPermalink }}"><span class="item-link">{{ .Title }}</span>{{ with .Params.subTitle }}<span class="sub-title">{{ . }}</span>{{ end }}<span class="nav-indicator-text">{{ i18n "nextPost" }}</span></a>
+      {{- end }}
+    </div>
+  </div>
+  {{- end }}
+  <div id="series" class="series-popup">
+    <div class="popup-header">
+      <span class="close-series-popup-icon-wrap"><i class="close-series-popup-icon"></i></span>
+      <span class="title">{{ $seriesName }}</span>
+      <span class="details-link"><a href="{{ printf "/series/%s/" ($seriesName | urlize) | relURL }}">{{ i18n "details" }}</a></span>
+    </div>
+    <div class="series-items">
+      {{- range $i, $item := $seriesPages }}
+      <a class="series-item-link{{ if eq $item.RelPermalink $.RelPermalink }} active{{ end }}" href="{{ $item.RelPermalink }}">
+        <span class="item-index">{{ add $i 1 }}. </span>{{ $item.Title }}{{ with $item.Params.subTitle }}<span class="sub-title">{{ . }}</span>{{ end }}
+      </a>
+      {{- end }}
+    </div>
+  </div>
+</div>
+{{- end }}
+
+{{- if .Params.copyright }}
+<div class="copyright-desc">{{ i18n "copyrightDesc" }}</div>
+{{- end }}
+
+{{ partial "comment.html" . }}
+{{ partial "photoswipe.html" . }}
+{{ partial "related-posts.html" . }}
+{{ end }}

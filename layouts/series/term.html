@@ -1,0 +1,46 @@
+{{ define "main" }}
+{{- $name := .Title -}}
+{{- $info := index hugo.Data.series $name | default dict -}}
+{{- $cover := $info.cover | default .Params.cover -}}
+{{- if $cover }}
+<div class="series-layout">
+  <div class="series-cover-img-wrap"{{ with ($info.coverPlaceholder | default .Params.coverPlaceholder) }} style="background-image: url({{ . | relURL }})"{{ end }}>
+    <div class="series-cover-img-placeholder"></div>
+    <script>
+      const seriesCoverImgStartTime = performance.now();
+      setTimeout(() => {
+        const seriesCoverImg = document.getElementById('seriesCoverImg');
+        if (seriesCoverImg && (!seriesCoverImg.classList.contains('loaded') || seriesCoverImg.classList.contains('cached'))) {
+          seriesCoverImg.classList.add('loading');
+        }
+      }, 100);
+      function onseriesCoverImgLoaded(img) {
+        if (performance.now() - seriesCoverImgStartTime > 300) {
+          img.classList.add('loaded');
+        } else {
+          img.classList.add('cached');
+        }
+      }
+    </script>
+    <img id="seriesCoverImg" class="cover-img" src="{{ $cover | relURL }}" alt="" onload="onseriesCoverImgLoaded(this)">
+    <div class="cover-info">
+      <div class="series-info">
+        <h1 class="series-name">{{ i18n "series" }}: {{ $name }}</h1>
+        <div class="description">{{ $info.description | default .Description }} <i class="post-count-icon"></i>{{ i18n "total" }} {{ len .Pages }} {{ i18n "seriesPostCount" }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+{{- else }}
+<h1>{{ i18n "series" }}: {{ $name }}</h1>
+<div class="series-description">{{ $info.description | default .Description }} <i class="post-count-icon"></i>{{ i18n "total" }} {{ len .Pages }} {{ i18n "seriesPostCount" }}</div>
+{{- end }}
+<div class="posts-info-layout series-layout">
+  <div class="posts-wrap">
+    {{- $paginator := .Paginate (.Pages.ByDate.Reverse) -}}
+    {{ partial "recent-posts.html" (dict "pages" $paginator.Pages "showHidden" true) }}
+    {{ partial "paginator.html" $paginator }}
+  </div>
+  <div class="info-wrap">{{ partial "site-info.html" . }}</div>
+</div>
+{{ end }}

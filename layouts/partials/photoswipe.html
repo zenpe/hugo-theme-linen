@@ -1,0 +1,149 @@
+{{- $enabled := and (site.Params.photoswipe | default true) (.Params.photoswipe | default true) -}}
+{{- if and $enabled (findRE "<img" .Content) }}
+{{- $version := site.Params.version | default now.Unix -}}
+{{- $hdrAssetsPrefix := .Params.hdrAssetsPrefix | default "" -}}
+<link rel="stylesheet" href="{{ printf "/linen-theme/css/photoswipe.css?v=%v" $version | relURL }}">
+<link rel="stylesheet" href="{{ printf "/linen-theme/css/photoswipe-dynamic-caption-plugin.css?v=%v" $version | relURL }}">
+<script type="module" defer>
+  import PhotoSwipeLightbox from '{{ printf "/linen-theme/js/photoswipe/photoswipe-lightbox.esm.min.js?v=%v" $version | relURL }}';
+  import PhotoSwipe from '{{ printf "/linen-theme/js/photoswipe/photoswipe.esm.min.js?v=%v" $version | relURL }}';
+  import PhotoSwipeDynamicCaption from '{{ printf "/linen-theme/js/photoswipe/photoswipe-dynamic-caption-plugin.esm.js?v=%v" $version | relURL }}';
+  let isPswpOpening = false;
+  let hdrAssetsPrefix = '{{ $hdrAssetsPrefix }}';
+  const getSafeAreaHeight = () => {
+    const el = document.getElementById('safe-area-test');
+    const height = window.getComputedStyle(el).height;
+    return parseInt(height) || 0;
+  };
+  const smallScreenPadding = { top: 0, bottom: 0, left: 0, right: 0 };
+  const largeScreenPadding = { top: 30, bottom: 30 + getSafeAreaHeight(), left: 0, right: 0 };
+  const isHDRScreen = window.screen.colorDepth >= 30;
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#post',
+    children: 'a.gallery-item',
+    bgOpacity: 1,
+    pswpModule: PhotoSwipe,
+    paddingFn: (viewportSize) => viewportSize.x < 700 ? smallScreenPadding : largeScreenPadding,
+  });
+  const updateGalleryItemSize = (element, width, height) => {
+    width = Math.round(Number(width));
+    height = Math.round(Number(height));
+    if (!element || !width || !height) return false;
+    element.dataset.pswpWidth = String(width);
+    element.dataset.pswpHeight = String(height);
+    element.dataset.pswpHassize = 'true';
+    const placeholder = element.querySelector('.lazyload-wrap .placeholder');
+    if (placeholder) placeholder.style.paddingBottom = `${height / width * 100}%`;
+    return true;
+  };
+  const syncSizeFromLoadedImage = (element) => {
+    const img = element?.querySelector('img');
+    return img?.naturalWidth && img?.naturalHeight
+      ? updateGalleryItemSize(element, img.naturalWidth, img.naturalHeight)
+      : false;
+  };
+  const preloadGalleryItemSize = (element) => new Promise((resolve) => {
+    if (!element || element.dataset.pswpHassize === 'true' || syncSizeFromLoadedImage(element)) {
+      resolve(true);
+      return;
+    }
+    const src = element.dataset.pswpSrc || element.getAttribute('href');
+    if (!src) {
+      resolve(false);
+      return;
+    }
+    const img = new Image();
+    const finish = () => resolve(updateGalleryItemSize(element, img.naturalWidth, img.naturalHeight));
+    const fallback = () => resolve(false);
+    const timer = window.setTimeout(fallback, 2500);
+    img.onload = () => {
+      window.clearTimeout(timer);
+      finish();
+    };
+    img.onerror = () => {
+      window.clearTimeout(timer);
+      fallback();
+    };
+    img.src = src;
+    if (img.complete) {
+      window.clearTimeout(timer);
+      finish();
+    }
+  });
+  const getExif = (element) => {
+    const exifString = element?.dataset?.pspwExif || '';
+    const locationString = element?.dataset?.pspwLocation || '';
+    const matches = [...exifString.matchAll(/\{([^}]*)\}/g)].map(match => match[1]);
+    if (matches?.length) {
+      const locationMatches = [...locationString.matchAll(/\{([^}]*)\}/g)].map(match => match[1]);
+      const keys = ['camera', 'lens', 'iso', 'focusLength', 'ev', 'aperture', 'shutterSpeed', 'hdr'];
+      const [camera, iso, focusLength, aperture, shutterSpeed, ev, lens, isHDR] = matches;
+      const isHDRActive = (isHDRScreen && (!!isHDR || element?.href?.includes(hdrAssetsPrefix)) && window.hdrEnabled) ? 'HDR' : '';
+      const exifObj = { camera, iso, focusLength, aperture, shutterSpeed, ev, lens, hdr: isHDRActive, location: locationMatches?.length === 2 ? { url: locationMatches[0], title: locationMatches[1] } : null };
+      const altTextMap = { camera: 'Camera', iso: 'ISO', focusLength: 'Focus Length', aperture: 'Aperture', shutterSpeed: 'Shutter Speed', ev: 'Exposure Value', lens: 'Lens', hdr: 'HDR Photo', location: 'Location' };
+      return `<div class="img-exif">${keys.map(key=>exifObj[key]?`<span class="${key}" title="${altTextMap[key]}">${typeof exifObj[key] === 'boolean' ? '' : exifObj[key]}</span>`: '').join('')}${exifObj.location ? `<a href="${exifObj.location.url}"><span class="location">${exifObj.location.title}</span></a>`: ''}</div>`;
+    }
+    return '';
+  };
+  new PhotoSwipeDynamicCaption(lightbox, { type: 'auto' });
+  lightbox.addFilter('domItemData', (itemData, element, linkEl) => {
+    const galleryItem = linkEl || element;
+    if (galleryItem?.dataset?.pswpHassize !== 'true') syncSizeFromLoadedImage(galleryItem);
+    if (galleryItem?.dataset?.pswpHassize === 'true') {
+      itemData.width = Number(galleryItem.dataset.pswpWidth);
+      itemData.height = Number(galleryItem.dataset.pswpHeight);
+      itemData.w = itemData.width;
+      itemData.h = itemData.height;
+    }
+    return itemData;
+  });
+  lightbox.addFilter('placeholderSrc', (placeholderSrc, content) => content?.slide?.data?.msrc || placeholderSrc);
+  lightbox.on('uiRegister', function() {
+    lightbox.pswp.ui.registerElement({
+      name: 'custom-caption',
+      order: 9,
+      isButton: false,
+      appendTo: 'root',
+      html: '',
+      onInit: (el, pswp) => {
+        lightbox.pswp.on('change', () => {
+          const currSlideElement = lightbox.pswp.currSlide.data.element;
+          let captionHTML = '';
+          if (currSlideElement) {
+            const gap = (window.innerHeight - lightbox.pswp.currSlide.data.height / lightbox.pswp.currSlide.data.width * window.innerWidth) / 2;
+            captionHTML = getExif(lightbox.pswp.currSlide.data?.element) || '';
+            if (window.innerWidth <= 600) {
+              el.style.top = `${gap}px`;
+              el.classList.add('mobile');
+            } else {
+              el.style.top = 'unset';
+              el.classList.remove('mobile');
+            }
+          }
+          el.innerHTML = captionHTML || '';
+        });
+      }
+    });
+  });
+  lightbox.on('beforeOpen', () => { isPswpOpening = true; });
+  lightbox.on('change', () => {
+    if (isPswpOpening) return isPswpOpening = false;
+    const currentImage = lightbox?.pswp?.currSlide?.data?.element;
+    currentImage && currentImage.scrollIntoView({ block: 'center', behavior: 'instant' });
+  });
+  document.querySelector('#post')?.addEventListener('click', async (event) => {
+    if (event.defaultPrevented || event.button === 1 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
+    const galleryItem = event.target?.closest?.('a.gallery-item');
+    if (!galleryItem || galleryItem.dataset.pswpHassize === 'true') return;
+    const gallery = document.querySelector('#post');
+    const items = [...gallery.querySelectorAll('a.gallery-item')];
+    const index = items.indexOf(galleryItem);
+    if (index < 0) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    await preloadGalleryItemSize(galleryItem);
+    lightbox.loadAndOpen(index, { gallery }, { x: event.clientX, y: event.clientY });
+  }, true);
+  lightbox.init();
+</script>
+{{- end }}

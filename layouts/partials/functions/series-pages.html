@@ -1,0 +1,9 @@
+{{- $series := . -}}
+{{- $pages := slice -}}
+{{- if $series -}}
+  {{- $pages = where site.RegularPages "Params.series" "intersect" (slice $series) -}}
+  {{- if not $pages -}}
+    {{- $pages = where site.RegularPages "Params.series" $series -}}
+  {{- end -}}
+{{- end -}}
+{{- return (sort $pages "Date" "desc") -}}

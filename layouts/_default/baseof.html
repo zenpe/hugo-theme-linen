@@ -1,0 +1,76 @@
+{{- $version := site.Params.version | default now.Unix -}}
+{{- if .IsPage }}{{- $contentForFragments := .Content -}}{{- end -}}
+{{- $seriesName := partial "functions/series-name.html" . -}}
+{{- $seriesPages := partial "functions/series-pages.html" $seriesName -}}
+<!DOCTYPE html>
+<html lang="{{ .Language.Lang | default site.Language.Lang }}">
+<head>
+  {{ partial "head/meta.html" . }}
+  {{ partial "head/styles.html" . }}
+  {{- if site.Params.lazyload | default true }}
+  {{ partial "lazyload-settings.html" . }}
+  {{- end }}
+  {{- range site.Params.heads }}
+  {{ . | safeHTML }}
+  {{- end }}
+  {{- range .Params.heads }}
+  {{ . | safeHTML }}
+  {{- end }}
+</head>
+<body>
+  <div id="page-top"></div>
+  {{ partial "header.html" . }}
+  {{- if .IsPage }}<div class="banner-bg"></div>{{ end -}}
+  <div id="safe-area-test" style="position: fixed; bottom: 0; height: env(safe-area-inset-bottom);"></div>
+  <div class="page-body{{ if .IsHome }} home-body{{ end }}">
+    <div class="side-content">
+      {{- if and .IsPage (ne .Params.toc false) .TableOfContents }}
+      <div id="toc" class="toc{{ if eq .Params.tocType "flat" }} flat{{ end }}">
+        <div class="toc-title"></div>
+        <div class="toc-items">{{ partial "toc.html" (dict "Headings" .Fragments.Headings) }}</div>
+      </div>
+      {{- end }}
+    </div>
+    <div class="side-content">
+      {{- if gt (len $seriesPages) 0 }}
+      <div class="post-series">
+        <a class="series-title" href="{{ printf "/series/%s/" ($seriesName | urlize) | relURL }}">{{ $seriesName }}</a>
+        <div class="series-items">
+          {{- range first 50 $seriesPages }}
+          <a class="series-item-link{{ if eq .RelPermalink $.RelPermalink }} active{{ end }}" href="{{ .RelPermalink }}">{{ .Title }}{{ with .Params.subTitle }}<span class="sub-title">{{ . }}</span>{{ end }}</a>
+          {{- end }}
+          {{- if gt (len $seriesPages) 50 }}
+          <a class="series-item-link view-more" href="{{ printf "/series/%s/" ($seriesName | urlize) | relURL }}">{{ i18n "total" }} {{ len $seriesPages }} {{ i18n "seriesPostCountShort" }}</a>
+          {{- end }}
+        </div>
+      </div>
+      {{- end }}
+    </div>
+    <div id="content-outer" class="{{ if .IsPage }}post-outer{{ else if and (eq .Kind "term") (eq .Data.Plural "series") }}series-outer{{ else if and (eq .Section "series") .Params.cover }}series-outer{{ end }}">
+      <div id="content-inner" class="content-inner">
+        {{ block "main" . }}{{ end }}
+      </div>
+    </div>
+  </div>
+
+  {{ partial "footer.html" . }}
+  <div id="mask"></div>
+  <a id="back-to-top" href="#page-top" title="back to top"></a>
+  {{- if .IsPage }}
+  <script src="{{ printf "/linen-theme/js/toc.js?v=%v" $version | relURL }}" defer></script>
+  {{- end }}
+  <script src="{{ printf "/linen-theme/js/linen.js?v=%v" $version | relURL }}"></script>
+  {{- if site.Params.lazyload | default true }}
+  <script src="{{ printf "/linen-theme/js/lazyload.js?v=%v" $version | relURL }}"></script>
+  {{- end }}
+  {{- with .Params.hdrAssetsPrefix }}
+  <script>var hdrAssetsPrefix = "{{ . }}";</script>
+  {{- end }}
+  {{- if .Params.hdrSwitch }}
+  <script src="{{ printf "/linen-theme/js/hdr.js?v=%v" $version | relURL }}"></script>
+  {{- end }}
+  {{- range site.Params.appends }}
+  {{ . | safeHTML }}
+  {{- end }}
+</body>
+</html>

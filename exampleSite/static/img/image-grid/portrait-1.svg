@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Portrait sample 1</title>
+  <desc id="desc">A tall demo image for the image grid portrait layout.</desc>
+  <rect width="900" height="1200" fill="#eef2f6"/>
+  <rect x="95" y="80" width="710" height="1040" rx="28" fill="#d8e1eb"/>
+  <circle cx="450" cy="270" r="130" fill="#7790aa"/>
+  <rect x="190" y="490" width="520" height="70" rx="35" fill="#42596f" opacity=".72"/>
+  <rect x="190" y="610" width="390" height="35" rx="17" fill="#42596f" opacity=".35"/>
+  <rect x="190" y="700" width="520" height="300" rx="20" fill="#a9bdce"/>
+</svg>

@@ -1,0 +1,13 @@
+{{- $cfg := site.Params.lazyloadConfig | default dict -}}
+<script>
+var $lazyload = {
+  intersectionRatio: {{ $cfg.intersectionRatio | default 0.33 }},
+  preloadCount: {{ $cfg.preloadCount | default 1 }},
+  keepPlaceholder: false
+};
+</script>
+<noscript id="noscript-styles">
+  {{- with resources.Get "linen-theme/css/noscript.css" }}
+  <style>{{ .Content | safeCSS }}</style>
+  {{- end }}
+</noscript>

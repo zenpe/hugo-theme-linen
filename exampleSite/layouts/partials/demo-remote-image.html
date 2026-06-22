@@ -1,0 +1,38 @@
+{{- $src := .src -}}
+{{- $alt := .alt | default "Remote image" -}}
+{{- $title := .title | default "" -}}
+{{- $ratio := .ratio | default "3/2" -}}
+{{- $maxWidth := .maxWidth | default "" -}}
+{{- $fitHeight := .fitHeight | default "" -}}
+{{- $paddingBottom := 66.66667 -}}
+{{- $ratioWidth := 3.0 -}}
+{{- $ratioHeight := 2.0 -}}
+{{- if in $ratio "/" -}}
+  {{- $parts := split $ratio "/" -}}
+  {{- $w := float (index $parts 0) -}}
+  {{- $h := float (index $parts 1) -}}
+  {{- if and (gt $w 0) (gt $h 0) -}}
+    {{- $ratioWidth = $w -}}
+    {{- $ratioHeight = $h -}}
+    {{- $paddingBottom = mul (div $h $w) 100 -}}
+  {{- end -}}
+{{- else -}}
+  {{- $ratioValue := float $ratio -}}
+  {{- if gt $ratioValue 0 -}}
+    {{- $ratioWidth = $ratioValue -}}
+    {{- $ratioHeight = 1.0 -}}
+    {{- $paddingBottom = div 100.0 $ratioValue -}}
+  {{- end -}}
+{{- end -}}
+{{- $img := printf `<img src="%s" alt="%s"%s loading="lazy">` ($src | relURL) ($alt | htmlEscape) (cond (ne $title "") (printf ` title="%s"` ($title | htmlEscape)) "") -}}
+{{- $encodedImg := replace ($img | urlquery) "+" "%20" -}}
+<span class="lazyload-outer-wrap" style="width: 100%;{{ if $fitHeight }} max-width: min(100%, calc({{ $fitHeight }} * {{ $ratioWidth }} / {{ $ratioHeight }})); margin-left: auto; margin-right: auto;{{ else }}{{ with $maxWidth }} max-width: {{ . }}; margin-left: auto; margin-right: auto;{{ end }}{{ end }}">
+  <a class="gallery-item" href="{{ $src | relURL }}" data-pswp-hassize="false" data-pswp-width="1920" data-pswp-height="1280" data-cropped="true" target="_blank" rel="noopener">
+    <noscript>{{ $img | safeHTML }}</noscript>
+    <span class="lazyload-wrap" data-content="{{ $encodedImg }}">
+      <span class="placeholder" style="padding-bottom: {{ printf "%.5f" $paddingBottom }}%;"></span>
+    </span>
+    {{- with $title }}<span class="pswp-caption-content">{{ . }}</span>{{ end -}}
+  </a>
+  {{- if $alt }}<span class="caption">{{ $alt }}</span>{{ end }}
+</span>

@@ -1,0 +1,39 @@
+{{- $post := . -}}
+{{- $cover := $post.Params.thumbnail | default $post.Params.cover -}}
+<div class="post-item" href="{{ $post.RelPermalink }}" onclick="onclickPostItem(this)">
+  <div class="item-body">
+    <div class="title-excerpt">
+      <div class="title-excerpt-text">
+        <a class="title" href="{{ $post.RelPermalink }}" onclick="event.stopPropagation()">{{ $post.Title }}{{ with $post.Params.subTitle }}<span class="sub-title">{{ . }}</span>{{ end }}</a>
+        {{- with $post.GetTerms "tags" }}
+        <div class="tags">
+          {{- range . }}
+          <a class="tag-item" href="{{ .RelPermalink }}" onclick="event.stopPropagation()">{{ .Title }}</a>
+          {{- end }}
+        </div>
+        {{- end }}
+        <div class="excerpt">{{ partial "functions/excerpt.html" $post }}</div>
+      </div>
+      <div class="post-meta">
+        {{- if not $post.Date.IsZero }}
+        <time class="date" datetime="{{ $post.Date.Format "2006-01-02T15:04:05Z07:00" }}">
+          {{ partial "functions/date.html" $post.Date }}
+        </time>
+        {{- end }}
+        {{- with $post.GetTerms "categories" }}
+        <span class="categories">
+          {{- range . }}
+          <a class="category-item" href="{{ .RelPermalink }}" onclick="event.stopPropagation()">{{ .Title }}</a>
+          {{- end }}
+        </span>
+        {{- end }}
+        <span class="read-time">{{ partial "words.html" (dict "page" $post "count" false) }}</span>
+      </div>
+    </div>
+    {{- with $cover }}
+    <div class="cover-img">
+      <img src="{{ . | relURL }}" alt="" loading="lazy">
+    </div>
+    {{- end }}
+  </div>
+</div>

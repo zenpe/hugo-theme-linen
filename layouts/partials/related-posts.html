@@ -1,0 +1,22 @@
+{{- if ne .Params.showRelated false -}}
+  {{- $related := site.RegularPages.Related . | first 3 -}}
+  {{- if gt (len $related) 0 }}
+  <div id="related-posts">
+    <div class="related-posts-title">{{ i18n "relatedPosts" }}</div>
+    {{- range $related }}
+      {{- $cover := .Params.thumbnail | default .Params.cover | default "/linen-theme/img/related-post.jpg" -}}
+      <a href="{{ .RelPermalink }}">
+        <div class="shared-link">
+          <div class="cover-img">
+            <img no-lazy class="not-gallery-item" src="{{ $cover | relURL }}" alt="" loading="lazy">
+          </div>
+          <div class="link-content">
+            <span class="link-title">{{ .Title }}</span>
+            <span class="link-desc">{{ partial "functions/excerpt.html" . }}</span>
+          </div>
+        </div>
+      </a>
+    {{- end }}
+  </div>
+  {{- end }}
+{{- end }}

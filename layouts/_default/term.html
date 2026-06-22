@@ -1,0 +1,11 @@
+{{ define "main" }}
+  <h1 id="archieve-h1">{{ .Title }}</h1>
+  <div class="posts-info-layout">
+    <div class="posts-wrap">
+      {{- $paginator := .Paginate (.Pages.ByDate.Reverse) -}}
+      {{ partial "recent-posts.html" (dict "pages" $paginator.Pages "showHidden" true) }}
+      {{ partial "paginator.html" $paginator }}
+    </div>
+    <div class="info-wrap">{{ partial "site-info.html" . }}</div>
+  </div>
+{{ end }}

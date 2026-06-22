@@ -1,0 +1,117 @@
+@mixin pageXPadding {
+  padding-left: Min(3vw, 26px);
+  padding-right: Min(3vw, 26px);
+}
+
+$darkText: #232323;
+$grayerText: #575757;
+$metaText: #666666;
+$moreGrayText: #898989;
+$green: #0f730c;
+$postMetaFontSize: 13px;
+$postItemGap: 20px;
+$black: #000000;
+$gray3: #333333;
+$gray5: #555555;
+$gray7: #777777;
+$gray9: #777777;
+$graya: #aaaaaa;
+$grayb: #bbbbbb;
+$grayc: #cccccc;
+$linkColor: rgb(0, 102, 204);
+$blue: rgb(0, 113, 227);
+$linkFontFamily:
+  SF Mono,
+  SFMono-Regular,
+  ui-monospace,
+  Menlo,
+  monospace;
+$navbarMinHeight: 65px;
+$commonPadding: Min(3vw, 15px);
+$postWidgetGap: 16px;
+$postWidth: Max(Min(1192px, 68vw), 960px);
+
+@mixin defaultFont {
+  font-family:
+    SF Pro Text,
+    SF Pro Icons,
+    Helvetica Neue,
+    Helvetica,
+    Arial,
+    sans-serif,
+    serif;
+}
+
+@mixin ellipsis($row_count: 1) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  @if $row_count <=1 {
+    white-space: nowrap;
+  } @else {
+    min-width: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: $row_count;
+    // 因为autoprefix的原因在编译以后下面这句css会消失，添加这个注释可以解决。
+    /*! autoprefixer: ignore next */
+    -webkit-box-orient: vertical;
+    /*! autoprefixer: on */
+  }
+}
+
+@mixin safe-padding($width: 0, $direction: "bottom") {
+  padding-#{$direction}: $width;
+  @supports (padding-#{$direction}: constant(safe-area-inset-#{$direction})) or
+    (padding-#{$direction}: env(safe-area-inset-#{$direction})) {
+    padding-#{$direction}: calc(
+      #{$width} + constant(safe-area-inset-#{$direction})
+    );
+    padding-#{$direction}: calc(#{$width} + env(safe-area-inset-#{$direction}));
+  }
+}
+
+@mixin sourceSansProFont {
+  font-family: "source-serif", "Source Sans Pro", serif;
+}
+
+@mixin sourceSerifFont {
+  font-family: "source han serif cn", "source-serif", serif;
+}
+
+@mixin subTitle {
+  font-size: 70%;
+  color: $moreGrayText;
+  margin-left: 0.5em;
+}
+
+@mixin tags {
+  @include defaultFont;
+  margin-bottom: -10px;
+  &:last-child {
+    margin-bottom: calc(1rem - 10px);
+  }
+  .tag-item {
+    background-color: #f5f5f5;
+    padding: 4px 7px 4px 6px;
+    font-size: 14px;
+    color: $grayerText;
+    margin-bottom: 10px;
+    display: inline-block;
+    margin-right: 10px;
+    &:hover {
+      color: #a7a2a2;
+    }
+    &::before {
+      content: "";
+      width: 13px;
+      height: 13px;
+      background-image: url("../img/icons/tag.svg");
+      background-size: cover;
+      filter: invert(1);
+      margin-right: 4px;
+      margin-bottom: -1px;
+      text-decoration: none;
+      display: inline-block;
+      opacity: 0.4;
+    }
+  }
+}

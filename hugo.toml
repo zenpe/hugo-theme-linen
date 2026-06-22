@@ -1,0 +1,75 @@
+baseURL = "https://example.com/"
+locale = "en"
+title = "Hugo Linen"
+theme = "hugo-theme-linen"
+summaryLength = 36
+enableRobotsTXT = true
+hasCJKLanguage = true
+
+[pagination]
+  pagerSize = 10
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    noClasses = false
+    codeFences = true
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
+  term = ["HTML", "RSS"]
+
+[params]
+  version = "0.1.0"
+  icon = "/linen-theme/favicon.svg"
+  description = "A clean Hugo theme focused on readability, UX, and minimal configuration."
+  photoswipe = true
+  lazyload = true
+  copyright = "This site and its content are licensed under a Creative Commons Attribution-NonCommercial 4.0 International License."
+
+  [[params.navItems]]
+    name = "Posts"
+    path = "/posts/"
+  [[params.navItems]]
+    name = "Archives"
+    path = "/archives/"
+  [[params.navItems]]
+    name = "Tags"
+    path = "/tags/"
+
+  [params.logo]
+    src = ""
+    text = "Hugo Linen"
+    width = 225
+    height = 42
+
+  [params.info]
+    name = "Hugo Linen"
+    avatar = "/linen-theme/img/vue-color-avatar.png"
+    site_desc = "A clean Hugo theme focused on readability."
+    github = ""
+    registration = ""
+
+  [params.feed]
+    path = "/index.xml"
+    limit = 10
+    icon = "/linen-theme/favicon.svg"
+
+  [params.comment]
+    enable = false
+    client_id = ""
+    client_secret = ""
+    repo = ""
+    owner = ""
+    admin = ""
+    proxy = ""
+    pager_direction = "last"

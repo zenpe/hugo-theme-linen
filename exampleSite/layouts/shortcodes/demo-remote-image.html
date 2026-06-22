@@ -1,0 +1,7 @@
+{{- $src := .Get "src" | default (.Get 0) -}}
+{{- $alt := .Get "alt" | default (.Get 1) | default "Remote image" -}}
+{{- $title := .Get "title" | default "" -}}
+{{- $ratio := .Get "ratio" | default "3/2" -}}
+{{- $maxWidth := .Get "maxWidth" | default "" -}}
+{{- $fitHeight := .Get "fitHeight" | default "" -}}
+{{- partial "demo-remote-image.html" (dict "src" $src "alt" $alt "title" $title "ratio" $ratio "maxWidth" $maxWidth "fitHeight" $fitHeight) -}}

@@ -1,0 +1,19 @@
+{{- $posts := where (where site.RegularPages "Section" "posts") "Params.hide.archive" "!=" true -}}
+{{- $series := site.Taxonomies.series -}}
+{{- $rssPath := site.Params.feed.path | default "/index.xml" -}}
+<section class="home-summary" aria-label="Site summary">
+  <div class="summary-main">
+    {{- with site.Params.info.site_desc }}
+    <div class="summary-desc">{{ . }}</div>
+    {{- end }}
+  </div>
+  <nav class="summary-links" aria-label="Site sections">
+    <a href="{{ "/archives/#posts" | relURL }}">{{ len $posts }} {{ i18n "posts" }}</a>
+    <a href="{{ "/archives/#categories" | relURL }}">{{ len site.Taxonomies.categories }} {{ i18n "categories" }}</a>
+    <a href="{{ "/archives/#tags" | relURL }}">{{ len site.Taxonomies.tags }} {{ i18n "tags" }}</a>
+    {{- if $series }}
+    <a href="{{ "/archives/#series" | relURL }}">{{ len $series }} {{ i18n "series" }}</a>
+    {{- end }}
+    <a href="{{ $rssPath | relURL }}">RSS</a>
+  </nav>
+</section>

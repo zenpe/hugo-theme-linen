@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Landscape sample 2</title>
+  <desc id="desc">A second wide demo image for comparing landscape grid cells.</desc>
+  <rect width="1600" height="900" fill="#f7f2eb"/>
+  <rect x="90" y="85" width="1420" height="730" rx="18" fill="#eadfce"/>
+  <rect x="150" y="150" width="360" height="560" rx="22" fill="#b97054"/>
+  <rect x="560" y="150" width="360" height="560" rx="22" fill="#d5a15f"/>
+  <rect x="970" y="150" width="360" height="560" rx="22" fill="#607d8a"/>
+  <path d="M150 735h1180" stroke="#332d29" stroke-width="26" stroke-linecap="round" opacity=".18"/>
+</svg>

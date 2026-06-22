@@ -1,0 +1,8 @@
+{{- $date := . -}}
+{{- if not $date -}}
+  {{- i18n "undated" -}}
+{{- else if hasPrefix site.Language.Lang "zh" -}}
+  {{- $date | time.Format "1 月 2 日，2006" -}}
+{{- else -}}
+  {{- $date | time.Format "Jan 2, 2006" -}}
+{{- end -}}

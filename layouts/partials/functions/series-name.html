@@ -1,0 +1,10 @@
+{{- $page := . -}}
+{{- $series := "" -}}
+{{- with $page.Params.series -}}
+  {{- if reflect.IsSlice . -}}
+    {{- $series = index . 0 -}}
+  {{- else -}}
+    {{- $series = . -}}
+  {{- end -}}
+{{- end -}}
+{{- return $series -}}

@@ -1,0 +1,24 @@
+{{- $posts := where (where site.RegularPages "Section" "posts") "Params.hide.archive" "!=" true -}}
+{{- $series := site.Taxonomies.series -}}
+<div class="site-info{{ if .IsHome }} home{{ end }}">
+  <div class="info-row">
+    <div class="author">
+      <img class="avatar" src="{{ site.Params.info.avatar | default "/linen-theme/img/vue-color-avatar.png" | relURL }}" alt="">
+      <div class="name">{{ site.Params.info.name | default site.Params.author | default site.Title }}</div>
+    </div>
+  </div>
+  {{- with site.Params.info.site_desc }}
+  <div class="info-row description">{{ . }}</div>
+  {{- end }}
+  <div class="info-row site-statisc">
+    <a href="{{ "/archives/#posts" | relURL }}" target="_self">{{ len $posts }} {{ i18n "posts" }}</a>
+    <span class="divider">/</span>
+    <a href="{{ "/archives/#categories" | relURL }}" target="_self">{{ len site.Taxonomies.categories }} {{ i18n "categories" }}</a>
+    <span class="divider">/</span>
+    <a href="{{ "/archives/#tags" | relURL }}" target="_self">{{ len site.Taxonomies.tags }} {{ i18n "tags" }}</a>
+    {{- if $series }}
+    <span class="divider">/</span>
+    <a href="{{ "/archives/#series" | relURL }}" target="_self">{{ len $series }} {{ i18n "series" }}</a>
+    {{- end }}
+  </div>
+</div>

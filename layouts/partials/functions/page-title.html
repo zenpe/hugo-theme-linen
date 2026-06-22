@@ -1,0 +1,15 @@
+{{- $page := . -}}
+{{- $title := "" -}}
+{{- if $page.IsHome -}}
+  {{- $title = site.Title -}}
+{{- else if eq $page.Kind "taxonomy" -}}
+  {{- $title = i18n $page.Data.Plural | default $page.Title -}}
+{{- else if eq $page.Kind "term" -}}
+  {{- $title = printf "%s: %s" (i18n (singularize $page.Data.Plural) | default (singularize $page.Data.Plural)) $page.Title -}}
+{{- else -}}
+  {{- $title = $page.Title | default site.Title -}}
+{{- end -}}
+{{- with $page.Params.subTitle -}}
+  {{- $title = printf "%s(%s)" $title . -}}
+{{- end -}}
+{{- $title -}}

@@ -1,0 +1,56 @@
+{{- $comment := site.Params.comment -}}
+{{- if and ($comment.enable | default false) (ne .Params.comment false) }}
+<div id="gitalk-container"></div>
+<script defer>
+  var $gitalkInitiated = false;
+  function hashPathname(pathname) {
+    let hash = 2166136261;
+    for (let i = 0; i < pathname.length; i++) {
+      hash ^= pathname.charCodeAt(i);
+      hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+    }
+    return (hash >>> 0).toString(36);
+  }
+  function loadGitalk() {
+    if ($gitalkInitiated) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "{{ "/linen-theme/js/gitalk/gitalk.css" | relURL }}";
+    document.head.appendChild(link);
+    const script = document.createElement("script");
+    script.src = "{{ "/linen-theme/js/gitalk/gitalk.min.js" | relURL }}";
+    const pageId = location.pathname.length > 40 ? hashPathname(location.pathname) : location.pathname;
+    script.onload = function() {
+      var gitalk = new Gitalk({
+        clientID: "{{ $comment.client_id }}",
+        clientSecret: "{{ $comment.client_secret }}",
+        repo: "{{ $comment.repo }}",
+        owner: "{{ $comment.owner }}",
+        admin: ["{{ $comment.admin }}"],
+        id: pageId,
+        distractionFreeMode: false,
+        proxy: "{{ $comment.proxy }}",
+        language: "{{ site.Language.Lang }}",
+        pagerDirection: "{{ $comment.pager_direction | default "last" }}"
+      });
+      gitalk.render("gitalk-container");
+    };
+    document.body.appendChild(script);
+    $gitalkInitiated = true;
+  }
+  document.addEventListener("DOMContentLoaded", function() {
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          loadGitalk();
+          observer.unobserve(entry.target);
+        }
+      });
+    });
+    const target = document.getElementById("gitalk-initiator");
+    const gitalkContainer = document.getElementById("gitalk-container");
+    if (target) observer.observe(target);
+    if (gitalkContainer) observer.observe(gitalkContainer);
+  });
+</script>
+{{- end }}

@@ -1,0 +1,11 @@
+{{- $class := .Get "class" | default (.Get 0) -}}
+<span class="image-grid{{ with $class }} {{ . }}{{ end }}">
+  {{- range split .Inner "\n" -}}
+    {{- $line := strings.TrimSpace . -}}
+    {{- if $line }}
+      {{- $rendered := $line | $.Page.RenderString -}}
+      {{- $rendered = $rendered | replaceRE "^<p>" "" | replaceRE "</p>\\s*$" "" -}}
+      <span class="grid-item">{{ $rendered | safeHTML }}</span>
+    {{- end }}
+  {{- end }}
+</span>

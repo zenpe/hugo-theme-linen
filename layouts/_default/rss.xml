@@ -1,0 +1,28 @@
+{{- printf "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" | safeHTML }}
+{{- $lang := cond (hasPrefix site.Language.Lang "zh") "zh" "en" -}}
+{{- printf "\n<?xml-stylesheet type=\"text/xsl\" href=\"%s\"?>" (printf "/linen-theme/css/rss-%s.xsl" $lang | absURL) | safeHTML }}
+<rss version="2.0">
+<channel>
+  <title>{{ site.Title }}</title>
+  <link>{{ site.BaseURL }}</link>
+  <description>{{ site.Params.description | default site.Title }}</description>
+  <lastBuildDate>{{ now.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</lastBuildDate>
+  {{- with site.Params.feed.icon }}
+  <image>
+    <url>{{ . | absURL }}</url>
+    <title>{{ site.Title }}</title>
+    <link>{{ site.BaseURL }}</link>
+  </image>
+  {{- end }}
+  {{- $limit := site.Params.feed.limit | default 10 -}}
+  {{- range first $limit (where site.RegularPages "Section" "posts").ByDate.Reverse }}
+  <item>
+    <title>{{ .Title }}{{ with .Params.subTitle }}({{ . }}){{ end }}</title>
+    <link>{{ .Permalink }}</link>
+    <guid>{{ .Permalink }}</guid>
+    <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</pubDate>
+    <description>{{ printf "<![CDATA[%s]]>" .Content | safeHTML }}</description>
+  </item>
+  {{- end }}
+</channel>
+</rss>

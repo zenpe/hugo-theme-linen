@@ -1,0 +1,19 @@
+{{- $headings := .Headings -}}
+{{- range $index, $heading := $headings }}
+  {{- if eq $heading.Level 2 }}
+  <div class="toc-item-wrap{{ if eq $index 0 }} active{{ end }}">
+    <a class="toc-item-link" data-id="{{ $heading.ID }}" href="#{{ $heading.ID }}">{{ $heading.Title | plainify }}</a>
+    {{- if $heading.Headings }}
+    <ul class="toc-sub-item-wrap">
+      {{- range $heading.Headings }}
+        {{- if eq .Level 3 }}
+        <li><a class="toc-sub-item-link" data-id="{{ .ID }}" href="#{{ .ID }}">{{ .Title | plainify }}</a></li>
+        {{- end }}
+      {{- end }}
+    </ul>
+    {{- end }}
+  </div>
+  {{- else if $heading.Headings }}
+    {{- partial "toc.html" (dict "Headings" $heading.Headings) -}}
+  {{- end }}
+{{- end }}

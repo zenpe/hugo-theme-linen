@@ -1,0 +1,19 @@
+{{- $title := partial "functions/page-title.html" . -}}
+{{- $desc := .Params.description | default .Params.excerpt | default .Summary | plainify | default site.Params.description | default site.Params.description -}}
+<meta charset="UTF-8">
+<meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ $title }} | {{ site.Title }}{{ end }}</title>
+<link rel="icon" type="image/x-icon" href="{{ site.Params.icon | default "/linen-theme/favicon.svg" | relURL }}">
+<meta name="referrer" content="no-referrer-when-downgrade">
+{{- with .Params.hide -}}
+  {{- if .seo }}<meta name="robots" content="noindex, nofollow">{{ end -}}
+{{- end }}
+<meta name="description" content="{{ $desc }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:locale" content="{{ site.Language.Lang }}">
+{{- with (.Params.ogImage | default .Params.cover | default site.Params.info.siteCardBg) }}
+<meta property="og:image" content="{{ . | absURL }}">
+{{- end }}

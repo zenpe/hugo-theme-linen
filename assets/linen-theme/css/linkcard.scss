@@ -1,0 +1,234 @@
+.shared-link {
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  background-size: cover;
+  background-position: center;
+  border-radius: 4px;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  margin-bottom: 1.2rem;
+  cursor: pointer;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  transition: box-shadow ease 0.3s;
+  text-decoration: none;
+  .cover-img {
+    width: 6rem;
+    height: 100%;
+    flex: 0 0 auto;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .link-content {
+    width: 0;
+    flex: 1 1 auto;
+    height: 100%;
+    background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.85),
+      rgba(255, 255, 255, 0.15)
+    );
+    backdrop-filter: blur(0.1rem);
+    padding: 0 0.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    font-family: inherit;
+    .link-title {
+      font-family: inherit;
+      font-weight: bold;
+      font-size: Max(Min(4.5vw, 1.15em), 15px);
+      color: #232323;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &:hover {
+    box-shadow: rgba(149, 157, 165, 0.4) 0px 8px 24px;
+  }
+}
+
+.xhs-link:hover {
+  box-shadow: rgba(149, 157, 165, 0.4) 0px 8px 24px;
+}
+
+.shared-link {
+  .link-content .link-desc {
+    color: #666;
+    font-size: Max(Min(2.5vw, 0.9rem), 13px);
+    line-height: 1.1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-shadow: 0px 0px 2px #fff;
+  }
+
+  .lazyload-outer-wrap {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .lazyload-wrap {
+    width: 100%;
+    height: 100%;
+
+    .placeholder,
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.links-warp {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.xhs-link {
+  display: block;
+  width: calc((100% - 24px) / 4);
+  margin-right: 8px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  overflow: hidden;
+  color: unset;
+  margin-left: 0;
+  margin-bottom: 1.2rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  transition: box-shadow ease 0.3s;
+
+  &:visited,
+  &:active {
+    color: unset;
+  }
+  &:nth-child(4n) {
+    margin-right: 0;
+  }
+
+  .cover-img {
+    width: 100%;
+    background-size: cover;
+    position: relative;
+
+    &::before {
+      content: "";
+      padding-top: 100%;
+      display: block;
+    }
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      backdrop-filter: blur(10px);
+      display: block;
+    }
+  }
+
+  .link-content {
+    .link-title {
+      padding: 5px;
+      font-size: 0.9rem;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      line-clamp: 2;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      font-weight: bold;
+      min-height: 3rem;
+      line-height: 1.5;
+    }
+
+    .link-user {
+      display: flex;
+      align-items: center;
+      padding: 5px;
+      background-color: #fff;
+      margin-top: -0.5rem;
+      z-index: 1;
+      position: relative;
+
+      .user-avatar {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+      }
+
+      .user-name {
+        margin-left: 10px;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .xhs-link {
+    width: calc((100% - 8px) / 2);
+    margin-right: 8px;
+
+    &:nth-child(2n) {
+      margin-right: 0;
+    }
+
+    .link-content .link-user .user-name {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+.github-link {
+  max-width: 325px;
+  display: inline-block;
+  background-color: rgb(229, 229, 229);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  transition: box-shadow ease 0.3s;
+  overflow: hidden;
+  &:hover {
+    box-shadow: rgba(149, 157, 165, 0.4) 0px 8px 24px;
+  }
+  .preview-img {
+    display: block;
+    aspect-ratio: 2 / 1;
+    background-color: #fff;
+  }
+  .title {
+    color: rgb(43, 43, 43);
+    font-size: 12px;
+    padding: 0.25em 0.6em 0.5em 0.6em;
+    font-weight: bold;
+    display: block;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+      sans-serif;
+    &::after{
+      content: 'github.com';
+      display: block;
+      font-weight: normal;
+      color: #777;
+    }
+  }
+  border-radius: 8px;
+}

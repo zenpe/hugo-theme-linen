@@ -1,0 +1,72 @@
+[archives]
+other = "归档"
+[categories]
+other = "分类"
+[category]
+other = "分类"
+[tags]
+other = "标签"
+[tag]
+other = "标签"
+[prev]
+other = "上一页"
+[next]
+other = "下一页"
+[about]
+other = "关于我"
+[latest]
+other = "最新文章"
+[posts]
+other = "文章"
+[aboutThisSite]
+other = "关于本站"
+[approximately]
+other = "约"
+[photos]
+other = "张图片"
+[photo]
+other = "张图片"
+[words]
+other = "个字"
+[toc]
+other = "目录"
+[undated]
+other = "未注明"
+[prevPost]
+other = "上一篇"
+[nextPost]
+other = "下一篇"
+[copyright]
+other = "本网站及其所有内容都遵循创意共享署名-非商业性使用 4.0 国际许可协议。"
+[relatedPosts]
+other = "相关文章"
+[series]
+other = "系列"
+[donateToAuthor]
+other = "赞赏作者"
+[details]
+other = "详情"
+[copyrightDesc]
+other = "本文照片和文字为原创内容，未经授权，请勿转载或用于商业用途。"
+[reads]
+other = "阅读"
+[seriesPostCount]
+other = "篇文章"
+[total]
+other = "共"
+[age_notice]
+other = "这是一个创建于 <span class='days-value'></span> 天前的主题，其中的信息可能已经有所发展或是发生改变。"
+[minsRead]
+other = "分钟阅读"
+[switchTo]
+other = "切换到"
+[renderedContent]
+other = "渲染后的内容"
+[rawMarkdownContent]
+other = "原始 Markdown 内容"
+[thanks]
+other = "感谢"
+[sponsored]
+other = "赞赏了"
+[seriesPostCountShort]
+other = "篇"

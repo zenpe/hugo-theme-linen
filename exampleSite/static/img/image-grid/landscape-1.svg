@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Landscape sample 1</title>
+  <desc id="desc">A wide demo image for the image grid landscape layout.</desc>
+  <rect width="1600" height="900" fill="#f1f5f2"/>
+  <rect x="80" y="80" width="1440" height="740" rx="18" fill="#d9e5db"/>
+  <path d="M80 610 360 390 620 545 820 330 1110 575 1260 430 1520 640v180H80Z" fill="#6f8f78"/>
+  <circle cx="1230" cy="250" r="92" fill="#f2c66d"/>
+  <rect x="140" y="135" width="360" height="30" rx="15" fill="#375744" opacity=".55"/>
+  <rect x="140" y="185" width="560" height="18" rx="9" fill="#375744" opacity=".28"/>
+</svg>

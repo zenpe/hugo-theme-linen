@@ -1,0 +1,10 @@
+{{- $page := . -}}
+{{- $count := true -}}
+{{- if reflect.IsMap . -}}
+  {{- $page = index . "page" -}}
+  {{- if isset . "count" }}{{ $count = index . "count" }}{{ end -}}
+{{- end -}}
+{{- $words := $page.WordCount -}}
+{{- $read := $page.ReadingTime -}}
+{{- i18n "approximately" }} {{ $read }} {{ i18n "minsRead" }}
+{{- if and $count $words }} <small>({{ $words }} {{ i18n "words" }})</small>{{ end -}}

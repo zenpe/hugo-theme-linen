@@ -1,0 +1,24 @@
+{{ define "main" }}
+<div id="archive">
+  <aside>
+    <h2 id="{{ .Data.Plural }}">{{ i18n .Data.Plural | default .Title }}</h2>
+    {{- if eq .Data.Plural "tags" }}
+    <div class="tag-list-wrap">
+      <ul class="tag-list">
+        {{- range .Data.Terms.Alphabetical }}
+        <li class="tag-list-item"><a class="tag-list-link" href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a><span class="tag-list-count">{{ .Count }}</span></li>
+        {{- end }}
+      </ul>
+    </div>
+    {{- else }}
+    <ul class="archive-list">
+      {{- range .Data.Terms.Alphabetical }}
+      <li class="archive-list-item">
+        <a class="archive-list-link" data-firstletter="{{ substr .Page.Title 0 1 }}" href="{{ .Page.RelPermalink }}">{{ .Page.Title }}<span class="archive-list-count">{{ .Count }}</span></a>
+      </li>
+      {{- end }}
+    </ul>
+    {{- end }}
+  </aside>
+</div>
+{{ end }}

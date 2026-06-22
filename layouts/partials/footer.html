@@ -1,0 +1,11 @@
+<footer id="footer">
+  <div class="footerInner">
+    <div class="footerItems">
+      <span class="footerItem"><abbr title="{{ site.Params.copyright | default (i18n "copyright") }}" style="cursor: help;">©</abbr>&nbsp;{{ now.Format "2006" }} {{ site.Params.author | default site.Title }}</span>
+      <span class="footerItem">Powered by&nbsp;<a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a></span>
+      {{- with site.Params.info.registration }}
+      <span class="footerItem">{{ . | safeHTML }}</span>
+      {{- end }}
+    </div>
+  </div>
+</footer>

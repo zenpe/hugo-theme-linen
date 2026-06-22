@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Portrait sample 3</title>
+  <desc id="desc">A green tall demo image for a portrait image grid cell.</desc>
+  <rect width="900" height="1200" fill="#edf4ed"/>
+  <rect x="95" y="85" width="710" height="1030" rx="28" fill="#cfe0d0"/>
+  <path d="M450 210c120 155 210 315 210 475 0 172-91 278-210 278S240 857 240 685c0-160 90-320 210-475Z" fill="#658b69"/>
+  <path d="M450 350v520M310 575l140 100 150-135" stroke="#eef6ee" stroke-width="30" stroke-linecap="round" fill="none" opacity=".75"/>
+</svg>

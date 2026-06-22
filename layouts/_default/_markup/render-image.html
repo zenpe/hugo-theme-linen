@@ -1,0 +1,95 @@
+{{- $src := .Destination -}}
+{{- $alt := .Text | plainify -}}
+{{- $title := .Title -}}
+{{- $noLazy := in $alt "no-lazy" -}}
+{{- $noLink := in $alt "no-link" -}}
+{{- $cleanAlt := $alt | replaceRE "\\$?placeholder=\\S+=placeholder" "" | replaceRE "\\$?aspect-ratio=\\S+=aspect-ratio" "" | replaceRE "\\$?no-lazy" "" | replaceRE "\\$?no-link" "" | strings.TrimSpace -}}
+{{- $placeholder := "" -}}
+{{- with findRESubmatch "\\$placeholder=(\\S+)=placeholder" $alt -}}
+  {{- $placeholder = index (index . 0) 1 -}}
+{{- end -}}
+{{- $aspect := "" -}}
+{{- with findRESubmatch "\\$aspect-ratio=(\\S+)=aspect-ratio" $alt -}}
+  {{- $aspect = index (index . 0) 1 -}}
+{{- end -}}
+{{- if or $noLazy (not (site.Params.lazyload | default true)) -}}
+<img src="{{ $src | safeURL }}" alt="{{ $cleanAlt }}"{{ with $title }} title="{{ . }}"{{ end }} loading="lazy">
+{{- else -}}
+{{- $ratio := 75.0 -}}
+{{- $pswpWidth := 1920 -}}
+{{- $pswpHeight := div 1920 1.5 -}}
+{{- $hasSize := false -}}
+{{- if $aspect -}}
+  {{- if in $aspect "/" -}}
+    {{- $parts := split $aspect "/" -}}
+    {{- $w := float (index $parts 0) -}}
+    {{- $h := float (index $parts 1) -}}
+    {{- if and (gt $w 0) (gt $h 0) -}}
+      {{- $ratio = mul (div $h $w) 100 -}}
+      {{- $pswpWidth = int $w -}}
+      {{- $pswpHeight = int $h -}}
+      {{- $hasSize = true -}}
+    {{- end -}}
+  {{- else -}}
+    {{- $aspectValue := float $aspect -}}
+    {{- if gt $aspectValue 0 -}}
+      {{- $ratio = div 100.0 $aspectValue -}}
+      {{- $pswpHeight = int (div (float $pswpWidth) $aspectValue) -}}
+      {{- $hasSize = true -}}
+    {{- end -}}
+  {{- end -}}
+{{- else -}}
+  {{- $imagePath := strings.TrimPrefix "/" (replaceRE "[?#].*$" "" $src) -}}
+  {{- if not (findRE "^(https?:)?//|^data:" $src) -}}
+    {{- $staticImagePath := printf "static/%s" $imagePath -}}
+    {{- if fileExists $staticImagePath -}}
+      {{- if findRE "(?i)\\.svg$" $staticImagePath -}}
+        {{- $svg := readFile $staticImagePath -}}
+        {{- $widthMatch := findRESubmatch `(?i)\swidth="([0-9.]+)` $svg -}}
+        {{- $heightMatch := findRESubmatch `(?i)\sheight="([0-9.]+)` $svg -}}
+        {{- if and $widthMatch $heightMatch -}}
+          {{- $w := float (index (index $widthMatch 0) 1) -}}
+          {{- $h := float (index (index $heightMatch 0) 1) -}}
+          {{- if and (gt $w 0) (gt $h 0) -}}
+            {{- $pswpWidth = int $w -}}
+            {{- $pswpHeight = int $h -}}
+            {{- $ratio = mul (div $h $w) 100 -}}
+            {{- $hasSize = true -}}
+          {{- end -}}
+        {{- end -}}
+      {{- else if findRE "(?i)\\.(jpe?g|png|gif|webp|bmp|tiff?)$" $staticImagePath -}}
+        {{- with imageConfig $staticImagePath -}}
+          {{- if and (gt .Width 0) (gt .Height 0) -}}
+            {{- $pswpWidth = .Width -}}
+            {{- $pswpHeight = .Height -}}
+            {{- $ratio = mul (div (float .Height) (float .Width)) 100 -}}
+            {{- $hasSize = true -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $img := printf `<img src="%s" alt="%s"%s loading="lazy">` ($src | safeURL) ($cleanAlt | htmlEscape) (cond (ne $title "") (printf ` title="%s"` ($title | htmlEscape)) "") -}}
+{{- $encodedImg := replace ($img | urlquery) "+" "%20" -}}
+<span class="lazyload-outer-wrap" style="width: 100%;">
+  {{- if $noLink }}
+  <span class="gallery-item" data-pswp-hassize="{{ $hasSize }}" data-pswp-width="{{ $pswpWidth }}" data-pswp-height="{{ $pswpHeight }}" data-cropped="true">
+    <noscript>{{ $img | safeHTML }}</noscript>
+    <span class="lazyload-wrap" data-content="{{ $encodedImg }}">
+      <span class="placeholder" style="padding-bottom: {{ printf "%.5f" $ratio }}%;{{ with $placeholder }}background-image: url({{ . }});{{ end }}"></span>
+    </span>
+    {{- with $title }}<span class="pswp-caption-content">{{ . }}</span>{{ end -}}
+  </span>
+  {{- else }}
+  <a class="gallery-item" href="{{ $src | safeURL }}" data-pswp-hassize="{{ $hasSize }}" data-pswp-width="{{ $pswpWidth }}" data-pswp-height="{{ $pswpHeight }}" data-cropped="true" target="_blank" rel="noopener">
+    <noscript>{{ $img | safeHTML }}</noscript>
+    <span class="lazyload-wrap" data-content="{{ $encodedImg }}">
+      <span class="placeholder" style="padding-bottom: {{ printf "%.5f" $ratio }}%;{{ with $placeholder }}background-image: url({{ . }});{{ end }}"></span>
+    </span>
+    {{- with $title }}<span class="pswp-caption-content">{{ . }}</span>{{ end -}}
+  </a>
+  {{- end }}
+  {{- if $cleanAlt }}<span class="caption">{{ $cleanAlt }}</span>{{ end }}
+</span>
+{{- end }}

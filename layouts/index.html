@@ -1,0 +1,30 @@
+{{ define "main" }}
+  {{- $topPages := partial "functions/top-article-pages.html" . -}}
+  {{- $pages := where site.RegularPages "Section" "posts" -}}
+  {{- $latestPages := slice -}}
+  {{- range $page := $pages.ByDate.Reverse }}
+    {{- $isTop := false -}}
+    {{- range $topPage := $topPages }}
+      {{- if or (eq $page.RelPermalink $topPage.RelPermalink) (and $page.File $topPage.File (eq $page.File.Path $topPage.File.Path)) }}
+        {{- $isTop = true -}}
+      {{- end }}
+    {{- end }}
+    {{- if not $isTop }}
+      {{- $latestPages = $latestPages | append $page -}}
+    {{- end }}
+  {{- end }}
+  {{- $paginator := .Paginate $latestPages -}}
+  {{- if eq $paginator.PageNumber 1 }}
+    {{ partial "home-summary.html" . }}
+    {{ partial "top-posts.html" . }}
+  {{- end }}
+  <div class="posts-info-layout home-page">
+    <div class="posts-wrap">
+      {{- if eq $paginator.PageNumber 1 }}
+      <div class="section-title">{{ i18n "latest" }}</div>
+      {{- end }}
+      {{ partial "recent-posts.html" (dict "pages" $paginator.Pages "showHidden" false) }}
+      {{ partial "paginator.html" $paginator }}
+    </div>
+  </div>
+{{ end }}

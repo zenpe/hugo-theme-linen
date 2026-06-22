@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Square sample</title>
+  <desc id="desc">A square demo image used in mixed image grid examples.</desc>
+  <rect width="1000" height="1000" fill="#f0eef7"/>
+  <rect x="95" y="95" width="810" height="810" rx="32" fill="#d9d3ea"/>
+  <circle cx="500" cy="500" r="260" fill="#7b6c9e"/>
+  <circle cx="500" cy="500" r="145" fill="#f0eef7" opacity=".78"/>
+  <path d="M270 735h460" stroke="#3f365b" stroke-width="34" stroke-linecap="round" opacity=".45"/>
+</svg>

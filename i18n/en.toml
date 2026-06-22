@@ -1,0 +1,72 @@
+[archives]
+other = "Archives"
+[categories]
+other = "Categories"
+[category]
+other = "Category"
+[tags]
+other = "Tags"
+[tag]
+other = "Tag"
+[prev]
+other = "Prev"
+[next]
+other = "Next"
+[about]
+other = "About"
+[latest]
+other = "Latest"
+[posts]
+other = "Posts"
+[aboutThisSite]
+other = "About This Site"
+[approximately]
+other = "About"
+[photos]
+other = "Photos"
+[photo]
+other = "Photo"
+[words]
+other = "Words"
+[toc]
+other = "Table of Contents"
+[undated]
+other = "Undated"
+[prevPost]
+other = "Prev"
+[nextPost]
+other = "Next"
+[copyright]
+other = "This site and its content are licensed under a Creative Commons Attribution-NonCommercial 4.0 International License."
+[relatedPosts]
+other = "Related Posts"
+[series]
+other = "Series"
+[donateToAuthor]
+other = "Buy Me a Coffee"
+[details]
+other = "Details"
+[copyrightDesc]
+other = "All text and images in this article are original. Please do not reproduce or use them for commercial purposes without permission."
+[reads]
+other = "Reads"
+[seriesPostCount]
+other = "articles"
+[total]
+other = "A total of"
+[age_notice]
+other = "This post was created <span class='days-value'></span> days ago, and the information may have changed."
+[minsRead]
+other = "min read"
+[switchTo]
+other = "Switch to "
+[renderedContent]
+other = "Rendered Content"
+[rawMarkdownContent]
+other = "Raw Markdown Content"
+[thanks]
+other = "Thanks to"
+[sponsored]
+other = "sponsored"
+[seriesPostCountShort]
+other = "articles"

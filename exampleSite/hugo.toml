@@ -1,0 +1,96 @@
+baseURL = "https://example.org/"
+defaultContentLanguage = "en"
+locale = "en"
+title = "Hugo Linen"
+theme = "hugo-theme-linen"
+summaryLength = 36
+hasCJKLanguage = true
+
+[pagination]
+  pagerSize = 6
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"
+
+[permalinks]
+  [permalinks.page]
+    posts = "/:slug/"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    codeFences = true
+    noClasses = false
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
+  term = ["HTML", "RSS"]
+
+[related]
+  includeNewer = true
+  threshold = 60
+  toLower = true
+  [[related.indices]]
+    name = "tags"
+    weight = 80
+  [[related.indices]]
+    name = "categories"
+    weight = 20
+
+[params]
+  version = "0.1.0"
+  description = "A clean Hugo theme for readable essays, notes, and photo-friendly posts."
+  photoswipe = true
+  lazyload = true
+  author = "Hugo Linen contributors"
+  copyright = "This demo content is licensed under MIT for theme demonstration purposes."
+
+  topArticles = [
+    "posts/features",
+    "posts/getting-started",
+    "posts/write-with-markdown",
+    "posts/image-grid"
+  ]
+
+  [params.feed]
+    path = "/index.xml"
+    limit = 10
+    icon = "/linen-theme/favicon.svg"
+
+  [[params.navItems]]
+    name = "Features"
+    path = "/features/"
+
+  [[params.navItems]]
+    name = "Archives"
+    path = "/archives/"
+
+  [params.logo]
+    src = ""
+    text = "Hugo Linen"
+    width = 225
+    height = 42
+
+  [params.info]
+    name = "Hugo Linen"
+    avatar = "/linen-theme/img/vue-color-avatar.png"
+    site_desc = "A focused Hugo port of the Linen writing theme."
+    github = ""
+    siteCardBg = "/linen-theme/img/pattern-randomized.jpg"
+    registration = ""
+
+  [params.comment]
+    enable = false
+    client_id = ""
+    client_secret = ""
+    repo = ""
+    owner = ""
+    admin = ""
+    proxy = ""
+    pager_direction = "last"

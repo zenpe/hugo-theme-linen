@@ -1,0 +1,17 @@
+{{- $top := slice -}}
+{{- range site.Params.topArticles }}
+  {{- $ref := . -}}
+  {{- $page := site.GetPage $ref -}}
+  {{- if not $page }}
+    {{- $slug := $ref | strings.TrimPrefix "_posts/" | strings.TrimPrefix "posts/" | strings.TrimSuffix ".md" | strings.TrimSuffix "/" -}}
+    {{- range where site.RegularPages "Section" "posts" }}
+      {{- if or (eq .Params.slug $slug) (and .File (eq .File.BaseFileName $slug)) }}
+        {{- $page = . -}}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- with $page }}
+    {{- $top = $top | append . -}}
+  {{- end }}
+{{- end -}}
+{{- return $top -}}

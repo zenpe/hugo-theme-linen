@@ -1,0 +1,14 @@
+{{- $type := .Type | default "text" -}}
+{{- $folded := false -}}
+{{- with .Attributes.title -}}
+  {{- if in . "folded" }}{{ $folded = true }}{{ end -}}
+{{- end -}}
+<figure class="highlight{{ if $folded }} folded{{ end }}">
+  {{- with .Attributes.title }}
+  <figcaption><span>{{ replace . "folded" "" | strings.TrimSpace }}</span></figcaption>
+  {{- end }}
+  <table><tbody><tr><td class="code"><pre>{{- range split (strings.TrimRight "\n" .Inner) "\n" -}}<span class="line">{{ . | htmlEscape | safeHTML }}</span>
+{{- end -}}</pre></td></tr></tbody></table>
+  <div class="copy-btn"></div>
+  {{- if $folded }}<div class="fold-toggle"></div>{{ end }}
+</figure>
