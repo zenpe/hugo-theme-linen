@@ -7,3 +7,6 @@ exampleSite/.hugo_build.lock
 exampleSite/hugo-server*.log
 .hugo_build.lock
 hugo-server*.log
+public/
+resources/
+netlify.toml
