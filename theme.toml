@@ -3,6 +3,7 @@ license = "MIT"
 licenselink = "https://github.com/zenpe/hugo-theme-linen/blob/main/LICENSE"
 description = "A clean Hugo port of the Linen theme for readable blogs and photo-friendly writing."
 homepage = "https://github.com/zenpe/hugo-theme-linen"
+demosite = "https://linen-demo.screensize.net"
 tags = ["blog", "clean", "minimal", "responsive", "photography"]
 features = ["posts", "archives", "series", "taxonomy", "toc", "photoswipe", "lazyload", "raw-markdown"]
 min_version = "0.163.2"

@@ -2,6 +2,8 @@
 
 Hugo Linen is a Hugo port/adaptation of [hexo-theme-linen](https://github.com/LynanBreeze/hexo-theme-linen), originally created by LynanBreeze. It keeps the Linen reading experience while using Hugo layouts, taxonomies, shortcodes, RSS output, and example-site conventions.
 
+**[View Demo](https://linen-demo.screensize.net)**
+
 ## Requirements
 
 - Hugo Extended `0.163.2` or newer
