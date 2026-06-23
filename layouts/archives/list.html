@@ -15,7 +15,6 @@
       {{ partial "recent-posts.html" (dict "pages" $paginator.Pages "showHidden" true) }}
       {{ partial "paginator.html" $paginator }}
     </div>
-    <div class="info-wrap">{{ partial "site-info.html" $ }}</div>
   </div>
 {{- else }}
 <div id="archive">

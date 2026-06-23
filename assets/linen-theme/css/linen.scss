@@ -1298,6 +1298,9 @@ body {
   display: flex;
   .posts-wrap {
     width: 75%;
+    &:only-child {
+      width: 100%;
+    }
   }
   .info-wrap {
     width: 25%;
