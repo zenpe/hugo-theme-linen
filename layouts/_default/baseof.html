@@ -18,6 +18,7 @@
   {{- end }}
 </head>
 <body>
+  <a class="skip-link" href="#content-inner">{{ i18n "skipToContent" }}</a>
   <div id="page-top"></div>
   {{ partial "header.html" . }}
   {{- if .IsPage }}<div class="banner-bg"></div>{{ end -}}
@@ -47,7 +48,7 @@
       {{- end }}
     </div>
     <div id="content-outer" class="{{ if .IsPage }}post-outer{{ else if and (eq .Kind "term") (eq .Data.Plural "series") }}series-outer{{ else if and (eq .Section "series") .Params.cover }}series-outer{{ end }}">
-      <div id="content-inner" class="content-inner">
+      <div id="content-inner" class="content-inner" tabindex="-1">
         {{ block "main" . }}{{ end }}
       </div>
     </div>
@@ -63,6 +64,7 @@
   {{- if site.Params.lazyload | default true }}
   <script src="{{ printf "/linen-theme/js/lazyload.js?v=%v" $version | relURL }}"></script>
   {{- end }}
+  {{ partial "photoswipe.html" . }}
   {{- with .Params.hdrAssetsPrefix }}
   <script>var hdrAssetsPrefix = "{{ . }}";</script>
   {{- end }}

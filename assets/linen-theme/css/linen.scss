@@ -44,6 +44,48 @@ a {
   }
 }
 
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -60px;
+  z-index: 1001;
+  padding: 8px 14px;
+  background-color: #fff;
+  color: $darkText;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: top ease 0.2s;
+  &:focus {
+    top: 8px;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid $blue;
+  outline-offset: 2px;
+}
+
+#content-inner:focus-visible,
+#content-inner:focus {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @mixin postItem {
   background-color: #fff;
   display: block;
@@ -256,6 +298,10 @@ body {
         .button {
           width: 25px;
           height: 25px;
+          padding: 0;
+          border: none;
+          background-color: transparent;
+          appearance: none;
           transition: opacity ease 0.3s;
           &:not(:last-child) {
             margin-right: 16px;

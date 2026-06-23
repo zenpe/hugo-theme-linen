@@ -27,7 +27,7 @@
 {{- if $isPost }}<div class="nav-header-pleaceholder"></div>{{ end -}}
 <div class="nav-header{{ if $isPost }} is-post{{ end }}">
   <div class="header-inner">
-    <a class="title{{ if $logoText }} is-text{{ end }}{{ if $logoSrc }} has-image{{ end }}" href="{{ site.Home.RelPermalink }}" title="index" style="{{ if $logoSrc }}background-image: url({{ $logoSrc | relURL }});{{ end }}{{ if and $logoWidth $logoHeight }}aspect-ratio: {{ $logoWidth }}/{{ $logoHeight }};{{ end }}">{{ $logoText }}</a>
+    <a class="title{{ if $logoText }} is-text{{ end }}{{ if $logoSrc }} has-image{{ end }}" href="{{ site.Home.RelPermalink }}" title="{{ site.Title }}" aria-label="{{ site.Title }}" style="{{ if $logoSrc }}background-image: url({{ $logoSrc | relURL }});{{ end }}{{ if and $logoWidth $logoHeight }}aspect-ratio: {{ $logoWidth }}/{{ $logoHeight }};{{ end }}">{{ $logoText }}</a>
     <div class="right">
       <div class="navItems">
         {{- range site.Params.navItems }}
@@ -35,17 +35,17 @@
         {{- end }}
       </div>
       <div class="buttonSet">
-        {{- if .Params.hdrSwitch }}<span class="button hdr-switch" title="Switch HDR/SDR content"></span>{{ end -}}
+        {{- if .Params.hdrSwitch }}<button type="button" class="button hdr-switch" title="Switch HDR/SDR content" aria-label="Switch HDR/SDR content"></button>{{ end -}}
         {{- if $targetLanguagePath }}
-          <a class="button language {{ $targetLanguage }}" href="{{ $targetLanguagePath }}" target="_self" title="switch language"></a>
+          <a class="button language {{ $targetLanguage }}" href="{{ $targetLanguagePath }}" target="_self" title="switch language" aria-label="switch language"></a>
         {{- end }}
         {{- with site.Params.info.github }}
-        <a class="button github" href="{{ . }}" target="_blank" rel="noopener" title="github"></a>
+        <a class="button github" href="{{ . }}" target="_blank" rel="noopener noreferrer" title="GitHub" aria-label="GitHub"></a>
         {{- end }}
         {{- if ne site.Params.feed false }}
-        <a class="button rss" href="{{ $rssPath | relURL }}" target="_blank" rel="noopener" title="rss"></a>
+        <a class="button rss" href="{{ $rssPath | relURL }}" target="_blank" rel="noopener" title="RSS" aria-label="RSS"></a>
         {{- end }}
-        {{- if and $isPost (ne .Params.toc false) }}<div id="toc-toggle" class="button toc"></div>{{ end -}}
+        {{- if and $isPost (ne .Params.toc false) }}<button type="button" id="toc-toggle" class="button toc" title="{{ i18n "toc" }}" aria-label="{{ i18n "toc" }}"></button>{{ end -}}
       </div>
     </div>
   </div>

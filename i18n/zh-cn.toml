@@ -16,6 +16,68 @@ other = "下一页"
 other = "关于我"
 [latest]
 other = "最新文章"
+[now]
+other = "现在"
+[moments]
+other = "动态"
+[moment]
+other = "动态"
+[momentsIndex]
+other = "月份"
+[olderMoments]
+other = "更早动态"
+[newerMoments]
+other = "较新动态"
+[viewAll]
+other = "查看全部"
+[month01]
+other = "一月"
+[month02]
+other = "二月"
+[month03]
+other = "三月"
+[month04]
+other = "四月"
+[month05]
+other = "五月"
+[month06]
+other = "六月"
+[month07]
+other = "七月"
+[month08]
+other = "八月"
+[month09]
+other = "九月"
+[month10]
+other = "十月"
+[month11]
+other = "十一月"
+[month12]
+other = "十二月"
+[monthShort01]
+other = "1月"
+[monthShort02]
+other = "2月"
+[monthShort03]
+other = "3月"
+[monthShort04]
+other = "4月"
+[monthShort05]
+other = "5月"
+[monthShort06]
+other = "6月"
+[monthShort07]
+other = "7月"
+[monthShort08]
+other = "8月"
+[monthShort09]
+other = "9月"
+[monthShort10]
+other = "10月"
+[monthShort11]
+other = "11月"
+[monthShort12]
+other = "12月"
 [posts]
 other = "文章"
 [aboutThisSite]
@@ -30,6 +92,10 @@ other = "张图片"
 other = "个字"
 [toc]
 other = "目录"
+[skipToContent]
+other = "跳到正文"
+[noMoments]
+other = "还没有动态。"
 [undated]
 other = "未注明"
 [prevPost]

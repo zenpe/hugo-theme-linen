@@ -1,10 +1,14 @@
 baseURL = "https://example.com/"
 locale = "en"
 title = "Hugo Linen"
-theme = "hugo-theme-linen"
 summaryLength = 36
 enableRobotsTXT = true
 hasCJKLanguage = true
+
+[module]
+  [module.hugoVersion]
+    min = "0.163.2"
+    extended = true
 
 [pagination]
   pagerSize = 10
@@ -34,7 +38,6 @@ hasCJKLanguage = true
   description = "A clean Hugo theme focused on readability, UX, and minimal configuration."
   photoswipe = true
   lazyload = true
-  copyright = "This site and its content are licensed under a Creative Commons Attribution-NonCommercial 4.0 International License."
 
   [[params.navItems]]
     name = "Posts"
@@ -63,6 +66,9 @@ hasCJKLanguage = true
     path = "/index.xml"
     limit = 10
     icon = "/linen-theme/favicon.svg"
+
+  [params.moments]
+    paginate = 20
 
   [params.comment]
     enable = false

@@ -1,0 +1,12 @@
+{{- if gt .TotalPages 1 }}
+<nav class="moments-pager" aria-label="Moments pagination">
+  {{- if .HasPrev }}
+  <a class="moments-pager-link newer" rel="prev" href="{{ .Prev.URL }}">{{ i18n "newerMoments" }}</a>
+  {{- else }}
+  <span></span>
+  {{- end }}
+  {{- if .HasNext }}
+  <a class="moments-pager-link older" rel="next" href="{{ .Next.URL }}">{{ i18n "olderMoments" }}</a>
+  {{- end }}
+</nav>
+{{- end }}

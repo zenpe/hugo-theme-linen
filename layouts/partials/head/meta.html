@@ -1,10 +1,11 @@
 {{- $title := partial "functions/page-title.html" . -}}
-{{- $desc := .Params.description | default .Params.excerpt | default .Summary | plainify | default site.Params.description | default site.Params.description -}}
+{{- $desc := .Params.description | default .Params.excerpt | default .Summary | plainify | strings.TrimSpace | truncate 200 | default site.Params.description -}}
 <meta charset="UTF-8">
-<meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1">
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ $title }} | {{ site.Title }}{{ end }}</title>
 <link rel="icon" type="image/x-icon" href="{{ site.Params.icon | default "/linen-theme/favicon.svg" | relURL }}">
 <meta name="referrer" content="no-referrer-when-downgrade">
+<link rel="canonical" href="{{ .Permalink }}">
 {{- with .Params.hide -}}
   {{- if .seo }}<meta name="robots" content="noindex, nofollow">{{ end -}}
 {{- end }}
@@ -14,6 +15,39 @@
 <meta property="og:url" content="{{ .Permalink }}">
 <meta property="og:description" content="{{ $desc }}">
 <meta property="og:locale" content="{{ site.Language.Lang }}">
-{{- with (.Params.ogImage | default .Params.cover | default site.Params.info.siteCardBg) }}
+<meta property="og:site_name" content="{{ site.Title }}">
+{{- $ogImage := .Params.ogImage | default .Params.cover | default site.Params.info.siteCardBg -}}
+{{- with $ogImage }}
 <meta property="og:image" content="{{ . | absURL }}">
+{{- end }}
+{{- if .IsPage }}
+{{- with .Date }}<meta property="article:published_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">{{ end }}
+{{- with .Lastmod }}<meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">{{ end }}
+{{- end }}
+<meta name="twitter:card" content="{{ if $ogImage }}summary_large_image{{ else }}summary{{ end }}">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $desc }}">
+{{- with $ogImage }}
+<meta name="twitter:image" content="{{ . | absURL }}">
+{{- end }}
+{{- range .AlternativeOutputFormats }}
+<link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink | safeURL }}" title="{{ $.Title }}">
+{{- end }}
+{{- if .IsPage }}
+{{- $author := site.Params.author | default site.Params.info.name | default site.Title -}}
+<script type="application/ld+json">
+{{- dict
+  "@context" "https://schema.org"
+  "@type" "BlogPosting"
+  "headline" $title
+  "description" $desc
+  "url" .Permalink
+  "mainEntityOfPage" .Permalink
+  "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+  "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+  "author" (dict "@type" "Person" "name" $author)
+  "publisher" (dict "@type" "Organization" "name" site.Title)
+  "image" (cond (ne (printf "%v" $ogImage) "") (slice ($ogImage | absURL)) slice)
+  | jsonify (dict "indent" "  ") | safeJS }}
+</script>
 {{- end }}

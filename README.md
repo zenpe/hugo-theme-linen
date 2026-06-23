@@ -41,6 +41,7 @@ The theme reads the equivalent settings from `params` in `hugo.toml`:
 - `params.comment`
 - `params.photoswipe`
 - `params.lazyload`
+- `params.moments.paginate`
 
 Supported page front matter includes `cover`, `coverInfo`, `thumbnail`, `excerpt`, `series`, `tags`, `categories`, `appendRawMarkdown`, `tocType`, `customComments`, `translations`, `hide.recent`, `hide.archive`, `donates`, `sponsors`, `ageWarning`, and `copyright`.
 
@@ -56,6 +57,28 @@ Supported page front matter includes `cover`, `coverInfo`, `thumbnail`, `excerpt
 ```
 
 When `appendRawMarkdown` is enabled, the theme shows `.RawContent` by default. Set `params.rawMarkdownSourceDir` only when you need to display preserved source Markdown files instead of the converted Hugo content.
+
+## Moments
+
+`Moments` is an optional short-form content stream separate from posts and archives. The recommended content structure is year/month based:
+
+```text
+content/moments/_index.md
+content/moments/2026/_index.md
+content/moments/2026/06/_index.md
+content/moments/2026/06/my-note.md
+```
+
+The main `/moments/` page shows recent moments with `Older moments` / `Newer moments` pagination. Month pages such as `/moments/2026/06/` show all moments in that month. Year pages such as `/moments/2026/` are supported and show all moments from that year.
+
+Configure the main stream page size with:
+
+```toml
+[params.moments]
+  paginate = 20
+```
+
+Moments render normal Markdown, including links, images, and `image-grid`. On list pages, PhotoSwipe groups images per moment item rather than across the whole page.
 
 ## Attribution
 

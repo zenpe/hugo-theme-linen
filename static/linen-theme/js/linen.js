@@ -4,6 +4,22 @@ var viewportWidth = window.innerWidth;
 var isAnchoring = false;
 var anchoringId = null;
 
+var prefersReducedMotion =
+  window.matchMedia &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (window.matchMedia) {
+  window
+    .matchMedia("(prefers-reduced-motion: reduce)")
+    .addEventListener("change", function (e) {
+      prefersReducedMotion = e.matches;
+    });
+}
+
+function smoothBehavior() {
+  return prefersReducedMotion ? "instant" : "smooth";
+}
+
 (function addUAClass() {
   const isIOS = /iPhone/.test(window.navigator.userAgent);
 
@@ -225,6 +241,11 @@ function onScroll() {
   if (!window.$gitalkInitiated && previousScrollY > window.innerHeight) {
     typeof loadGitalk !== "undefined" && loadGitalk();
   }
+  // Ignore tiny scroll deltas so the header does not flicker during
+  // inertial/trackpad scrolling near the show/hide threshold.
+  if (Math.abs(window.scrollY - previousScrollY) < 10) {
+    return;
+  }
   if (window.scrollY < previousScrollY) {
     if (!document.querySelector(".pswp--open")) {
       header.classList.remove("hide");
@@ -274,7 +295,7 @@ function onclickPostItem(element) {
   if (text.length > 0) {
     return;
   }
-  const href = element.getAttribute("href");
+  const href = element.getAttribute("data-href") || element.getAttribute("href");
   if (href) {
     location.href = href;
   }
@@ -293,7 +314,7 @@ function handleClick(e) {
       const footNoteDefinitionElement = document.getElementById(footNoteDefinitionId);
       if (footNoteDefinitionElement) {
         footNoteDefinitionElement.scrollIntoView({
-          behavior: "smooth",
+          behavior: smoothBehavior(),
           block: "start",
         });
         e.preventDefault();
@@ -306,7 +327,7 @@ function handleClick(e) {
       const footNoteTextElements = document.querySelectorAll('.footnote-anchor-wrap');
       if (footNoteTextElements.length) {
         footNoteTextElements[0].scrollIntoView({
-          behavior: "smooth",
+          behavior: smoothBehavior(),
           block: "start",
         });
         e.preventDefault();
@@ -365,7 +386,7 @@ function handleClick(e) {
       window.scrollTo({
         top: 0,
         left: 0,
-        behavior: "smooth",
+        behavior: smoothBehavior(),
       });
       return;
     } else if (target?.className?.includes("placeholder")) {
@@ -390,7 +411,7 @@ function handleClick(e) {
         window.scrollTo({
           top: 0,
           left: 0,
-          behavior: "smooth",
+          behavior: smoothBehavior(),
         });
       } else {
         anchor &&
@@ -421,7 +442,7 @@ function handleClick(e) {
         }
       }
       return;
-    } else if (target.id === "toc-toggle") {
+    } else if (target.id === "toc-toggle" || target.closest?.("#toc-toggle")) {
       if (tocElement?.classList?.contains("visible")) {
         tocElement.classList.remove("visible");
         maskElement.classList.remove("visible");

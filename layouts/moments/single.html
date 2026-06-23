@@ -1,0 +1,11 @@
+{{ define "main" }}
+<article id="post" class="article moment-single">
+  <h1 class="post-title">{{ with .Params.title }}{{ . }}{{ else }}{{ if not .Date.IsZero }}{{ .Date.Format "2006-01-02 15:04" }}{{ else }}{{ i18n "moment" }}{{ end }}{{ end }}</h1>
+  <div class="post-meta">
+    {{- if not .Date.IsZero }}
+    <time class="date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02 15:04" }}</time>
+    {{- end }}
+  </div>
+  <div id="page-content">{{ .Content }}</div>
+</article>
+{{ end }}

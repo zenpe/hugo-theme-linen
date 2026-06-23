@@ -70,7 +70,8 @@
     {{- end -}}
   {{- end -}}
 {{- end -}}
-{{- $img := printf `<img src="%s" alt="%s"%s loading="lazy">` ($src | safeURL) ($cleanAlt | htmlEscape) (cond (ne $title "") (printf ` title="%s"` ($title | htmlEscape)) "") -}}
+{{- $sizeAttr := cond $hasSize (printf ` width="%v" height="%v"` $pswpWidth $pswpHeight) "" -}}
+{{- $img := printf `<img src="%s" alt="%s"%s%s loading="lazy">` ($src | safeURL) ($cleanAlt | htmlEscape) (cond (ne $title "") (printf ` title="%s"` ($title | htmlEscape)) "") $sizeAttr -}}
 {{- $encodedImg := replace ($img | urlquery) "+" "%20" -}}
 <span class="lazyload-outer-wrap" style="width: 100%;">
   {{- if $noLink }}

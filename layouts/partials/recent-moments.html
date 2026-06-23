@@ -1,0 +1,21 @@
+{{- $moments := first 1 ((where site.RegularPages "Section" "moments").ByDate.Reverse) -}}
+{{- if gt (len $moments) 0 }}
+<section class="moments-preview now-preview" aria-labelledby="moments-preview-title">
+  <div class="moments-preview-head">
+    <h2 id="moments-preview-title">{{ i18n "now" }}</h2>
+    <a href="{{ "/moments/" | relURL }}">{{ i18n "moments" }}</a>
+  </div>
+  <div class="moments-preview-list">
+    {{- range $moments }}
+    <article class="moment-item" id="home-moment-{{ .RelPermalink | anchorize }}">
+      <a class="moment-time" href="{{ .RelPermalink }}">
+        <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "01-02 15:04" }}</time>
+      </a>
+      <a class="moment-summary" href="{{ .RelPermalink }}">
+        {{ .Plain | strings.TrimSpace | truncate 138 }}
+      </a>
+    </article>
+    {{- end }}
+  </div>
+</section>
+{{- end }}

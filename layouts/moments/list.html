@@ -1,0 +1,69 @@
+{{ define "main" }}
+{{- $momentsSection := site.GetPage "section" "moments" -}}
+{{- $isMomentsHome := and $momentsSection (eq .RelPermalink $momentsSection.RelPermalink) -}}
+{{- $currentMonthKey := "" -}}
+{{- if gt (len .RegularPages) 0 -}}
+  {{- $currentMonthKey = (index (.RegularPages.ByDate.Reverse) 0).Date.Format "2006-01" -}}
+{{- end -}}
+{{- $allMoments := cond $isMomentsHome ((where site.RegularPages "Section" "moments").ByDate.Reverse) (.RegularPagesRecursive.ByDate.Reverse) -}}
+{{- $indexMoments := (where site.RegularPages "Section" "moments").ByDate.Reverse -}}
+{{- $pageSize := site.Params.moments.paginate | default 20 -}}
+{{- $paginator := cond $isMomentsHome (.Paginate $allMoments $pageSize) (.Paginate $allMoments 9999) -}}
+<section class="moments-page">
+  <header class="moments-header">
+    <h1>{{ .Title }}</h1>
+    {{- with .Content }}
+    <div class="moments-description">{{ . }}</div>
+    {{- end }}
+  </header>
+  <div class="moments-layout">
+    <div class="moments-timeline">
+      {{- if eq (len $paginator.Pages) 0 }}
+      <p class="moments-empty">{{ i18n "noMoments" }}</p>
+      {{- end }}
+      {{- range $paginator.Pages.GroupByDate "2006" }}
+      <section class="moments-year" aria-labelledby="moments-{{ .Key }}">
+        <h2 id="moments-{{ .Key }}">{{ .Key }}</h2>
+        <div class="moments-year-list">
+          {{- range .Pages.GroupByDate "2006-01" }}
+          <section class="moments-month" aria-labelledby="moments-{{ .Key }}">
+            {{- $monthName := i18n (printf "month%s" ((index .Pages 0).Date.Format "01")) -}}
+            <h3 id="moments-{{ .Key }}">{{ $monthName }}</h3>
+            <div class="moments-month-list">
+              {{- range .Pages }}
+              <article class="moment-item" id="moment-{{ .RelPermalink | anchorize }}">
+                <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "01-02 15:04" }}</time>
+                <div class="moment-content">{{ .Content }}</div>
+              </article>
+              {{- end }}
+            </div>
+          </section>
+          {{- end }}
+        </div>
+      </section>
+      {{- end }}
+      {{ partial "moments-paginator.html" $paginator }}
+    </div>
+    <aside class="moments-index" aria-labelledby="moments-index-title">
+      <h2 id="moments-index-title">{{ i18n "momentsIndex" }}</h2>
+      {{- range $indexMoments.GroupByDate "2006" }}
+      <section class="moments-index-year">
+        <h3>{{ .Key }}</h3>
+        <div class="moments-index-months">
+          {{- range .Pages.GroupByDate "2006-01" }}
+            {{- $first := index .Pages 0 -}}
+            {{- $monthKey := $first.Date.Format "2006-01" -}}
+            {{- $monthPage := site.GetPage (printf "moments/%s/%s" ($first.Date.Format "2006") ($first.Date.Format "01")) -}}
+            {{- $monthURL := printf "%s%s/%s/" $momentsSection.RelPermalink ($first.Date.Format "2006") ($first.Date.Format "01") -}}
+            {{- with $monthPage -}}
+              {{- $monthURL = .RelPermalink -}}
+            {{- end -}}
+            <a class="moments-index-month{{ if eq $monthKey $currentMonthKey }} active{{ end }}" href="{{ $monthURL }}">{{ i18n (printf "monthShort%s" ($first.Date.Format "01")) }} <span>{{ len .Pages }}</span></a>
+            {{- end }}
+        </div>
+      </section>
+      {{- end }}
+    </aside>
+  </div>
+</section>
+{{ end }}

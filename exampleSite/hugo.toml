@@ -63,6 +63,9 @@ hasCJKLanguage = true
     limit = 10
     icon = "/linen-theme/favicon.svg"
 
+  [params.moments]
+    paginate = 4
+
   [[params.navItems]]
     name = "Features"
     path = "/features/"
@@ -70,6 +73,10 @@ hasCJKLanguage = true
   [[params.navItems]]
     name = "Archives"
     path = "/archives/"
+
+  [[params.navItems]]
+    name = "Moments"
+    path = "/moments/"
 
   [params.logo]
     src = ""

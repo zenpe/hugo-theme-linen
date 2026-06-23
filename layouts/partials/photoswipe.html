@@ -1,7 +1,9 @@
 {{- $enabled := and (site.Params.photoswipe | default true) (.Params.photoswipe | default true) -}}
-{{- if and $enabled (findRE "<img" .Content) }}
+{{- $shouldLoad := and $enabled (or (findRE "<img" .Content) (eq .Section "moments")) -}}
+{{- if $shouldLoad }}
 {{- $version := site.Params.version | default now.Unix -}}
 {{- $hdrAssetsPrefix := .Params.hdrAssetsPrefix | default "" -}}
+{{- $gallerySelector := cond (and (eq .Section "moments") (not .IsPage)) ".moment-item" "#post" -}}
 <link rel="stylesheet" href="{{ printf "/linen-theme/css/photoswipe.css?v=%v" $version | relURL }}">
 <link rel="stylesheet" href="{{ printf "/linen-theme/css/photoswipe-dynamic-caption-plugin.css?v=%v" $version | relURL }}">
 <script type="module" defer>
@@ -18,8 +20,9 @@
   const smallScreenPadding = { top: 0, bottom: 0, left: 0, right: 0 };
   const largeScreenPadding = { top: 30, bottom: 30 + getSafeAreaHeight(), left: 0, right: 0 };
   const isHDRScreen = window.screen.colorDepth >= 30;
+  const gallerySelector = '{{ $gallerySelector }}';
   const lightbox = new PhotoSwipeLightbox({
-    gallery: '#post',
+    gallery: gallerySelector,
     children: 'a.gallery-item',
     bgOpacity: 1,
     pswpModule: PhotoSwipe,
@@ -131,19 +134,20 @@
     const currentImage = lightbox?.pswp?.currSlide?.data?.element;
     currentImage && currentImage.scrollIntoView({ block: 'center', behavior: 'instant' });
   });
-  document.querySelector('#post')?.addEventListener('click', async (event) => {
-    if (event.defaultPrevented || event.button === 1 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
-    const galleryItem = event.target?.closest?.('a.gallery-item');
-    if (!galleryItem || galleryItem.dataset.pswpHassize === 'true') return;
-    const gallery = document.querySelector('#post');
-    const items = [...gallery.querySelectorAll('a.gallery-item')];
-    const index = items.indexOf(galleryItem);
-    if (index < 0) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    await preloadGalleryItemSize(galleryItem);
-    lightbox.loadAndOpen(index, { gallery }, { x: event.clientX, y: event.clientY });
-  }, true);
+  document.querySelectorAll(gallerySelector).forEach((gallery) => {
+    gallery.addEventListener('click', async (event) => {
+      if (event.defaultPrevented || event.button === 1 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
+      const galleryItem = event.target?.closest?.('a.gallery-item');
+      if (!galleryItem || !gallery.contains(galleryItem) || galleryItem.dataset.pswpHassize === 'true') return;
+      const items = [...gallery.querySelectorAll('a.gallery-item')];
+      const index = items.indexOf(galleryItem);
+      if (index < 0) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      await preloadGalleryItemSize(galleryItem);
+      lightbox.loadAndOpen(index, { gallery }, { x: event.clientX, y: event.clientY });
+    }, true);
+  });
   lightbox.init();
 </script>
 {{- end }}

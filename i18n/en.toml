@@ -16,6 +16,68 @@ other = "Next"
 other = "About"
 [latest]
 other = "Latest"
+[now]
+other = "Now"
+[moments]
+other = "Moments"
+[moment]
+other = "Moment"
+[momentsIndex]
+other = "Months"
+[olderMoments]
+other = "Older moments"
+[newerMoments]
+other = "Newer moments"
+[viewAll]
+other = "View all"
+[month01]
+other = "January"
+[month02]
+other = "February"
+[month03]
+other = "March"
+[month04]
+other = "April"
+[month05]
+other = "May"
+[month06]
+other = "June"
+[month07]
+other = "July"
+[month08]
+other = "August"
+[month09]
+other = "September"
+[month10]
+other = "October"
+[month11]
+other = "November"
+[month12]
+other = "December"
+[monthShort01]
+other = "Jan"
+[monthShort02]
+other = "Feb"
+[monthShort03]
+other = "Mar"
+[monthShort04]
+other = "Apr"
+[monthShort05]
+other = "May"
+[monthShort06]
+other = "Jun"
+[monthShort07]
+other = "Jul"
+[monthShort08]
+other = "Aug"
+[monthShort09]
+other = "Sep"
+[monthShort10]
+other = "Oct"
+[monthShort11]
+other = "Nov"
+[monthShort12]
+other = "Dec"
 [posts]
 other = "Posts"
 [aboutThisSite]
@@ -30,6 +92,10 @@ other = "Photo"
 other = "Words"
 [toc]
 other = "Table of Contents"
+[skipToContent]
+other = "Skip to content"
+[noMoments]
+other = "No moments yet."
 [undated]
 other = "Undated"
 [prevPost]

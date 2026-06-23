@@ -1,6 +1,6 @@
 {{- $post := . -}}
 {{- $cover := $post.Params.thumbnail | default $post.Params.cover -}}
-<div class="post-item" href="{{ $post.RelPermalink }}" onclick="onclickPostItem(this)">
+<article class="post-item" data-href="{{ $post.RelPermalink }}" onclick="onclickPostItem(this)">
   <div class="item-body">
     <div class="title-excerpt">
       <div class="title-excerpt-text">
@@ -36,4 +36,4 @@
     </div>
     {{- end }}
   </div>
-</div>
+</article>

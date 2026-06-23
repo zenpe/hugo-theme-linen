@@ -1,5 +1,5 @@
 {{- $version := site.Params.version | default now.Unix -}}
-{{- $styles := slice "linen-theme/css/linen.scss" "linen-theme/css/mediaquery.scss" "linen-theme/css/hugo-compat.scss" -}}
+{{- $styles := slice "linen-theme/css/linen.scss" "linen-theme/css/mediaquery.scss" "linen-theme/css/hugo-compat.scss" "linen-theme/css/moments.scss" -}}
 {{- range $styles -}}
   {{- with resources.Get . -}}
     {{- $css := . | toCSS (dict "outputStyle" "compressed" "targetPath" (replace .Name ".scss" ".css")) | fingerprint -}}

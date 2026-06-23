@@ -49,5 +49,3 @@ The shortcode supports `r73`, `r37`, `r64`, and `r46` for two-image mixed layout
 ## Unknown-size images
 
 External or migrated image URLs may not have dimensions available during the Hugo build. The theme measures those images in the browser before PhotoSwipe opens them.
-
-Maintainers can verify that behavior on the [external image fallback test](/tests/external-image-fallback/).
