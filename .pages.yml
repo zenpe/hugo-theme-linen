@@ -1,0 +1,6 @@
+# Cloudflare Pages build config
+build:
+  command: mkdir -p exampleSite/themes && ln -sf ../.. exampleSite/themes/hugo-theme-linen && hugo --source exampleSite --gc --minify
+  output: exampleSite/public
+  environment:
+    HUGO_VERSION: "0.163.2"
